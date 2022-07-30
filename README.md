@@ -1,12 +1,13 @@
-# Getting Started with Create React App
+# Ecommerce App
 
 This is a Cloudsbay Ecommerce App. It is a fullstack app built in MERN stack.
 
-## Available Scripts
+To run the project
 
-In the project directory, you can run:
+### `git clone <repo_link>`
+
+### `npm install`
 
 ### `npm start`
 
-Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
