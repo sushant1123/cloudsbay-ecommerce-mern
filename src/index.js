@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 
 import "./index.css";
+import "antd/dist/antd.min.css";
 
 const root = document.getElementById("root"); //by react v17
 
