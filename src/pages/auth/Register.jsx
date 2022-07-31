@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
-
-import { auth, googleAuthProvider } from "../../firebase";
-
 import { sendSignInLinkToEmail } from "firebase/auth";
+import { toast } from "react-toastify";
 
-import "react-toastify/dist/ReactToastify.css";
+import { auth } from "../../firebase";
 
 const Register = () => {
 	const [email, setEmail] = useState("");
@@ -25,10 +22,13 @@ const Register = () => {
 				theme: "colored",
 			});
 
-			localStorage.setItem("emailForSignIn", email);
+			localStorage.setItem("emailForRegistration", email);
 			console.log("registration email sent");
 		} catch (error) {
 			console.log(error);
+			toast.error(`Something went wrong. Please try again later.`, {
+				theme: "colored",
+			});
 		}
 
 		setEmail("");
@@ -58,8 +58,6 @@ const Register = () => {
 			<div className="row">
 				<div className="col-md-6 offset-md-3">
 					<h4>Register</h4>
-
-					<ToastContainer />
 
 					{registrationForm()}
 				</div>
