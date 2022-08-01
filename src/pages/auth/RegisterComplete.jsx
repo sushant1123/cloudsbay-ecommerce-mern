@@ -10,14 +10,15 @@ const RegisterComplete = ({ history }) => {
 	const [password, setPassword] = useState("");
 
 	useEffect(() => {
-		if (
-			localStorage.getItem("emailForRegistration") === undefined ||
-			localStorage.getItem("emailForRegistration") === null
-		) {
-			history.push("/register");
-		} else {
-			setEmail(localStorage.getItem("emailForRegistration"));
-		}
+		// if (
+		// 	localStorage.getItem("emailForRegistration") === undefined ||
+		// 	localStorage.getItem("emailForRegistration") === null
+		// ) {
+		// 	history.push("/register");
+		// } else {
+		// 	setEmail(localStorage.getItem("emailForRegistration"));
+		// }
+		setEmail(localStorage.getItem("emailForRegistration") || "");
 	}, [history]);
 
 	const handleRegisterSubmit = async (e) => {
@@ -43,7 +44,7 @@ const RegisterComplete = ({ history }) => {
 				//get token
 				const idTokenResult = await user.getIdTokenResult();
 
-				// console.log(idTokenResult);
+				console.log(idTokenResult);
 
 				//redirect to home/dashboard
 				history.push("/");

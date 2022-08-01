@@ -37,16 +37,18 @@ const Register = () => {
 	const registrationForm = () => {
 		return (
 			<form onSubmit={handleRegisterSubmit} className="form">
-				<input
-					type="email"
-					className="form-control"
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
-					autoFocus
-					placeholder="Email"
-				/>
+				<div className="mb-4">
+					<input
+						type="email"
+						className="form-control"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+						autoFocus
+						placeholder="Email"
+					/>
+				</div>
 
-				<button type="submit" className="btn btn-raised mt-2 fw-bold">
+				<button type="submit" className="btn btn-raised fw-bold">
 					Register
 				</button>
 			</form>
