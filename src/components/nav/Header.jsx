@@ -20,7 +20,7 @@ const Header = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
 
-	// const { email } = useSelector((state) => state.user);
+	const { user } = useSelector((state) => state);
 
 	const logOut = async () => {
 		try {
@@ -32,18 +32,24 @@ const Header = () => {
 		}
 	};
 
+	const styleProps = {
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
+	};
+
 	const items = [
 		{
 			label: <Link to="/">Home</Link>,
 			key: "home",
 			icon: <AppstoreOutlined />,
-			style: { display: "flex", alignItems: "center", justifyContent: "center" },
+			style: styleProps,
 		},
-		{
-			label: "Username",
-			// label: email.length ? email.split("@")[0] : "Username",
+		user && {
+			label: user?.email ? user?.email.split("@")[0] : "Username",
 			key: "SubMenu",
 			icon: <SettingOutlined />,
+			style: user ? { ...styleProps, marginLeft: "auto" } : styleProps,
 			children: [
 				{
 					label: "Option 1",
@@ -53,25 +59,28 @@ const Header = () => {
 					label: "Option 2",
 					key: "setting:2",
 				},
-				{
+
+				user?.email && {
 					label: "LogOut",
 					icon: <LogoutOutlined />,
-					style: { display: "flex", alignItems: "center", justifyContent: "left" },
+					style: { ...styleProps, justifyContent: "left" },
 					onClick: () => logOut(),
 				},
 			],
 		},
-		{
+
+		!user && {
 			label: <Link to="/login">Login</Link>,
 			key: "login",
 			icon: <UserOutlined />,
-			style: { marginLeft: "auto", display: "flex", alignItems: "center", justifyContent: "center" },
+			style: { marginLeft: "auto", ...styleProps },
 		},
-		{
+
+		!user && {
 			label: <Link to="/register">Register</Link>,
 			key: "register",
 			icon: <UserAddOutlined />,
-			style: { display: "flex", alignItems: "center", justifyContent: "center" },
+			style: styleProps,
 		},
 	];
 

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { Button } from "antd";
 import { GoogleOutlined, MailOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 import { auth, googleAuthProvider } from "../../firebase";
@@ -10,10 +11,18 @@ import { loggedInUser } from "../../redux/index.actions";
 
 const Login = ({ history }) => {
 	const [email, setEmail] = useState("sushantbahirat40@gmail.com");
-	const [password, setPassword] = useState("1234567890");
+	const [password, setPassword] = useState("12345678");
 	const [loading, setLoading] = useState(false);
 
+	const { user } = useSelector((state) => state);
+
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		if (user && user.token) {
+			history.push("/");
+		}
+	}, [user, history]);
 
 	const handleLoginSubmit = async (e) => {
 		e.preventDefault();
@@ -110,19 +119,9 @@ const Login = ({ history }) => {
 					>
 						Login with Google
 					</Button>
-					{/* 
-						<Button
-					type="primary"
-					shape="round"
-					onClick={handleLoginSubmit}
-					icon={<MailOutlined />}
-					size="large"
-					block
-					disabled={!email || password.length < 8}
-				>
-					Login with Email/Password
-				</Button>
-					 */}
+					<Link to="/forgot/password" className="float-end text-danger fw-bold">
+						Forgot Password?
+					</Link>
 				</div>
 			</div>
 		</div>

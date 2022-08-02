@@ -15,6 +15,7 @@ import RegisterComplete from "./pages/auth/RegisterComplete";
 import "react-toastify/dist/ReactToastify.css";
 
 import { auth } from "./firebase";
+import ForgotPassword from "./pages/auth/ForgotPassword";
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -23,7 +24,6 @@ const App = () => {
 		const unsubscribe = onAuthStateChanged(auth, async (user) => {
 			if (user) {
 				const idToken = await user.getIdToken();
-				// console.log(idToken);
 
 				dispatch(loggedInUser({ email: user.email, token: idToken }));
 			}
@@ -40,6 +40,7 @@ const App = () => {
 				<Route path="/login" component={Login} />
 				<Route exact path="/register" component={Register} />
 				<Route path="/register/complete" component={RegisterComplete} />
+				<Route path="/forgot/password" component={ForgotPassword} />
 			</Switch>
 			<ToastContainer theme="colored" />
 		</div>
