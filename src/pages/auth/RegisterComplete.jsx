@@ -51,9 +51,7 @@ const RegisterComplete = ({ history }) => {
 			}
 		} catch (error) {
 			console.log(error);
-			toast.error(`Something went wrong. Please try again later.`, {
-				theme: "colored",
-			});
+			toast.error("Something went wrong. Please try again later.");
 		}
 	};
 

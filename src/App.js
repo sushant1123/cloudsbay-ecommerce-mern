@@ -41,7 +41,7 @@ const App = () => {
 				<Route exact path="/register" component={Register} />
 				<Route path="/register/complete" component={RegisterComplete} />
 			</Switch>
-			<ToastContainer />
+			<ToastContainer theme="colored" />
 		</div>
 	);
 };

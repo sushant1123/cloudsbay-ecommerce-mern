@@ -18,17 +18,13 @@ const Register = () => {
 		try {
 			await sendSignInLinkToEmail(auth, email, actionConfig);
 
-			toast.success(`Email is sent to ${email}. Click the link to complete your registration`, {
-				theme: "colored",
-			});
+			toast.success(`Email is sent to ${email}. Click the link to complete your registration`);
 
 			localStorage.setItem("emailForRegistration", email);
 			console.log("registration email sent");
 		} catch (error) {
 			console.log(error);
-			toast.error(`Something went wrong. Please try again later.`, {
-				theme: "colored",
-			});
+			toast.error(`Something went wrong. Please try again later.`);
 		}
 
 		setEmail("");
