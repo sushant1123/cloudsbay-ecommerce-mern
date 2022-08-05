@@ -5,9 +5,26 @@ import { Button } from "antd";
 import { GoogleOutlined, MailOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 import { auth, googleAuthProvider } from "../../firebase";
 import { loggedInUser } from "../../redux/index.actions";
+
+const createOrUpdateUser = async (authToken) => {
+	try {
+		return await axios.post(
+			process.env.REACT_APP_API,
+			{},
+			{
+				headers: {
+					authToken,
+				},
+			}
+		);
+	} catch (error) {
+		console.log(error);
+	}
+};
 
 const Login = ({ history }) => {
 	const [email, setEmail] = useState("sushantbahirat40@gmail.com");
@@ -34,9 +51,12 @@ const Login = ({ history }) => {
 			const { user } = result;
 			const token = await user.getIdToken();
 
-			dispatch(loggedInUser({ email: user.email, token }));
+			const response = await createOrUpdateUser(token);
+			console.log("create-or-update-response", response);
 
-			history.push("/");
+			// dispatch(loggedInUser({ email: user.email, token }));
+
+			// history.push("/");
 		} catch (error) {
 			console.log(error);
 			toast.error(error.message);
@@ -51,6 +71,9 @@ const Login = ({ history }) => {
 
 			const { user } = result;
 			const token = await user.getIdToken();
+
+			const response = await createOrUpdateUser(token);
+			console.log("create-or-update-response", response);
 
 			dispatch(loggedInUser({ email: user.email, token }));
 			history.push("/");
