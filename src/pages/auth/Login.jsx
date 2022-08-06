@@ -5,11 +5,18 @@ import { Button } from "antd";
 import { GoogleOutlined, MailOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import axios from "axios";
 
 import { auth, googleAuthProvider } from "../../firebase";
 import { loggedInUser } from "../../redux/index.actions";
 import { createOrUpdateUser } from "../../api's/auth";
+
+const roleBasedRedirect = (res, history) => {
+	if (res.data.user.role === "admin") {
+		history.push("/admin/dashboard");
+	} else {
+		history.push("/user/history");
+	}
+};
 
 const Login = ({ history }) => {
 	const [email, setEmail] = useState("sushantbahirat40@gmail.com");
@@ -41,7 +48,8 @@ const Login = ({ history }) => {
 			console.log("create-or-update-response", response.data);
 
 			dispatch(loggedInUser({ _id, name, picture, role, email: user.email, token }));
-			history.push("/");
+
+			roleBasedRedirect(response, history);
 		} catch (error) {
 			console.log(error);
 			toast.error(error.message);
@@ -64,7 +72,8 @@ const Login = ({ history }) => {
 
 			dispatch(loggedInUser({ _id, name, picture, role, email: user.email, token }));
 
-			history.push("/");
+			roleBasedRedirect(response, history);
+			// history.push("/");
 		} catch (error) {
 			console.log(error);
 			toast.error(error.message);

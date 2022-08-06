@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { signInWithEmailLink, updatePassword } from "firebase/auth";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 
 import { auth } from "../../firebase";
 import { loggedInUser } from "../../redux/index.actions";

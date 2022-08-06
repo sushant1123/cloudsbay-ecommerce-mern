@@ -8,12 +8,12 @@ import Header from "./components/nav/Header";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Home from "./pages/Home";
-import { loggedInUser } from "./redux/index.actions";
-
 import RegisterComplete from "./pages/auth/RegisterComplete";
 
 import "react-toastify/dist/ReactToastify.css";
 
+import { loggedInUser } from "./redux/index.actions";
+import { currentUser } from "./api's/auth";
 import { auth } from "./firebase";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 
@@ -22,10 +22,21 @@ const App = () => {
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, async (user) => {
-			if (user) {
-				const idToken = await user.getIdToken();
+			try {
+				if (user) {
+					const token = await user.getIdToken();
 
-				dispatch(loggedInUser({ email: user.email, token: idToken }));
+					const response = await currentUser(token);
+
+					if (response.data.user) {
+						const { name, role, picture, _id } = response.data.user;
+						console.log("current-user-response", response.data);
+
+						dispatch(loggedInUser({ _id, name, picture, role, email: user.email, token }));
+					}
+				}
+			} catch (error) {
+				console.log(error);
 			}
 		});
 
