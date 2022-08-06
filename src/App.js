@@ -16,6 +16,8 @@ import { loggedInUser } from "./redux/index.actions";
 import { currentUser } from "./api's/auth";
 import { auth } from "./firebase";
 import ForgotPassword from "./pages/auth/ForgotPassword";
+import History from "./pages/user/History";
+import UserRoute from "./components/routes/UserRoute";
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -52,6 +54,7 @@ const App = () => {
 				<Route exact path="/register" component={Register} />
 				<Route path="/register/complete" component={RegisterComplete} />
 				<Route path="/forgot/password" component={ForgotPassword} />
+				<UserRoute path="/user/history" component={History} />
 			</Switch>
 			<ToastContainer theme="colored" />
 		</div>
