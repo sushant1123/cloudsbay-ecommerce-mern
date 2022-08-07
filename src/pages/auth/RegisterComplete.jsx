@@ -2,12 +2,18 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { signInWithEmailLink, updatePassword } from "firebase/auth";
+import { useSelector, useDispatch } from "react-redux";
 
 import { auth } from "../../firebase";
+import { loggedInUser } from "../../redux/index.actions";
+import { createOrUpdateUser } from "../../api's/auth";
 
 const RegisterComplete = ({ history }) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+
+	const { user } = useSelector((state) => state);
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		// if (
@@ -42,9 +48,15 @@ const RegisterComplete = ({ history }) => {
 				await updatePassword(user, password);
 
 				//get token
-				const idTokenResult = await user.getIdTokenResult();
+				const token = await user.getIdToken();
 
-				console.log(idTokenResult);
+				const response = await createOrUpdateUser(token);
+				const { name, role, picture, _id } = response.data.user;
+				console.log("create-or-update-response", response.data);
+
+				dispatch(loggedInUser({ _id, name, picture, role, email: user.email, token }));
+
+				console.log(token);
 
 				//redirect to home/dashboard
 				history.push("/");

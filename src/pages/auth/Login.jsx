@@ -5,24 +5,16 @@ import { Button } from "antd";
 import { GoogleOutlined, MailOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import axios from "axios";
 
 import { auth, googleAuthProvider } from "../../firebase";
 import { loggedInUser } from "../../redux/index.actions";
+import { createOrUpdateUser } from "../../api's/auth";
 
-const createOrUpdateUser = async (authToken) => {
-	try {
-		return await axios.post(
-			process.env.REACT_APP_API,
-			{},
-			{
-				headers: {
-					authToken,
-				},
-			}
-		);
-	} catch (error) {
-		console.log(error);
+const roleBasedRedirect = (res, history) => {
+	if (res.data.user.role === "admin") {
+		history.push("/admin/dashboard");
+	} else {
+		history.push("/user/history");
 	}
 };
 
@@ -52,11 +44,12 @@ const Login = ({ history }) => {
 			const token = await user.getIdToken();
 
 			const response = await createOrUpdateUser(token);
-			console.log("create-or-update-response", response);
+			const { name, role, picture, _id } = response.data.user;
+			console.log("create-or-update-response", response.data);
 
-			// dispatch(loggedInUser({ email: user.email, token }));
+			dispatch(loggedInUser({ _id, name, picture, role, email: user.email, token }));
 
-			// history.push("/");
+			roleBasedRedirect(response, history);
 		} catch (error) {
 			console.log(error);
 			toast.error(error.message);
@@ -73,10 +66,14 @@ const Login = ({ history }) => {
 			const token = await user.getIdToken();
 
 			const response = await createOrUpdateUser(token);
-			console.log("create-or-update-response", response);
 
-			dispatch(loggedInUser({ email: user.email, token }));
-			history.push("/");
+			const { name, role, picture, _id } = response.data.user;
+			console.log("create-or-update-response", response.data);
+
+			dispatch(loggedInUser({ _id, name, picture, role, email: user.email, token }));
+
+			roleBasedRedirect(response, history);
+			// history.push("/");
 		} catch (error) {
 			console.log(error);
 			toast.error(error.message);
