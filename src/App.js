@@ -9,17 +9,19 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Home from "./pages/Home";
 import RegisterComplete from "./pages/auth/RegisterComplete";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import History from "./pages/user/History";
+import Password from "./pages/user/Password";
+import WishList from "./pages/user/WishList";
+import AdminDashboard from "./pages/admin/Dashboard";
+import UserRoute from "./components/routes/UserRoute";
+import AdminRoute from "./components/routes/AdminRoute";
 
 import "react-toastify/dist/ReactToastify.css";
 
 import { loggedInUser } from "./redux/index.actions";
 import { currentUser } from "./api's/auth";
 import { auth } from "./firebase";
-import ForgotPassword from "./pages/auth/ForgotPassword";
-import History from "./pages/user/History";
-import UserRoute from "./components/routes/UserRoute";
-import Password from "./pages/user/Password";
-import WishList from "./pages/user/WishList";
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -59,6 +61,7 @@ const App = () => {
 				<UserRoute path="/user/history" component={History} />
 				<UserRoute path="/user/password" component={Password} />
 				<UserRoute path="/user/wishlist" component={WishList} />
+				<AdminRoute path="/admin/dashboard" component={AdminDashboard} />
 			</Switch>
 			<ToastContainer theme="colored" />
 		</div>
