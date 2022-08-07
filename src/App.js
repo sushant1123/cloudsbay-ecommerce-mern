@@ -18,6 +18,8 @@ import { auth } from "./firebase";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import History from "./pages/user/History";
 import UserRoute from "./components/routes/UserRoute";
+import Password from "./pages/user/Password";
+import WishList from "./pages/user/WishList";
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -55,6 +57,8 @@ const App = () => {
 				<Route path="/register/complete" component={RegisterComplete} />
 				<Route path="/forgot/password" component={ForgotPassword} />
 				<UserRoute path="/user/history" component={History} />
+				<UserRoute path="/user/password" component={Password} />
+				<UserRoute path="/user/wishlist" component={WishList} />
 			</Switch>
 			<ToastContainer theme="colored" />
 		</div>
