@@ -51,13 +51,14 @@ const Header = () => {
 			icon: <SettingOutlined />,
 			style: user ? { ...styleProps, marginLeft: "auto" } : styleProps,
 			children: [
-				{
-					label: "Option 1",
-					key: "setting:1",
+				user?.role === "subscriber" && {
+					label: <Link to="/user/history">Dashboard</Link>,
+					// key: "setting:1",
 				},
-				{
-					label: "Option 2",
-					key: "setting:2",
+
+				user?.role === "admin" && {
+					label: <Link to="/admin/dashboard">Dashboard</Link>,
+					// key: "setting:1",
 				},
 
 				user?.email && {
