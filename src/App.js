@@ -16,10 +16,10 @@ import WishList from "./pages/user/WishList";
 import AdminDashboard from "./pages/admin/Dashboard";
 import Product from "./pages/admin/Product";
 import Products from "./pages/admin/Products";
-import Category from "./pages/admin/Category";
+// import Category from "./pages/admin/Category";
 import SubCategory from "./pages/admin/SubCategory";
 import Coupons from "./pages/admin/Coupons";
-// import CreateCategory from "./pages/admin/category/CreateCategory";
+import CreateCategory from "./pages/admin/category/CreateCategory";
 
 import UserRoute from "./components/routes/UserRoute";
 import AdminRoute from "./components/routes/AdminRoute";
@@ -71,11 +71,11 @@ const App = () => {
 				<AdminRoute path="/admin/dashboard" component={AdminDashboard} />
 				<AdminRoute path="/admin/product" component={Product} />
 				<AdminRoute path="/admin/products" component={Products} />
-				<AdminRoute path="/admin/category" component={Category} />
+				<AdminRoute path="/admin/category" component={CreateCategory} />
 				<AdminRoute path="/admin/sub-category" component={SubCategory} />
 				<AdminRoute path="/admin/coupons" component={Coupons} />
 			</Switch>
-			<ToastContainer theme="colored" />
+			<ToastContainer theme="colored" pauseOnFocusLoss={false} />
 		</div>
 	);
 };
