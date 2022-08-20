@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { signInWithEmailLink, updatePassword } from "firebase/auth";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { auth } from "../../firebase";
 import { loggedInUser } from "../../redux/index.actions";
@@ -12,7 +12,7 @@ const RegisterComplete = ({ history }) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
-	const { user } = useSelector((state) => state);
+	// const { user } = useSelector((state) => state);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
