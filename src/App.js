@@ -71,7 +71,7 @@ const App = () => {
 				<AdminRoute path="/admin/dashboard" component={AdminDashboard} />
 				<AdminRoute path="/admin/product" component={Product} />
 				<AdminRoute path="/admin/products" component={Products} />
-				<AdminRoute path="/admin/category" component={CreateCategory} />
+				<AdminRoute exact path="/admin/category" component={CreateCategory} />
 				<AdminRoute path="/admin/sub-category" component={SubCategory} />
 				<AdminRoute path="/admin/coupons" component={Coupons} />
 			</Switch>

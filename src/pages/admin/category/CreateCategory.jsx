@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Button } from "antd";
 
 import AdminNav from "../../../components/nav/AdminNav";
 
 import { createCategory, removeCategory, getCategories } from "../../../api's/category";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const Category = () => {
 	const [category, setCategory] = useState("");
@@ -17,13 +19,14 @@ const Category = () => {
 
 	const handleCategorySubmit = async (e) => {
 		e.preventDefault();
-		console.log("category", category);
 		setLoading(true);
 		try {
 			const response = await createCategory(category, user.token);
+			setLoading(false);
 
 			toast.success(`${response.data.message}}`);
 			setCategory("");
+			loadCategories();
 		} catch (error) {
 			setLoading(false);
 			toast.error(error.response.data.message);
@@ -43,8 +46,9 @@ const Category = () => {
 						className="form-control"
 						value={category}
 						onChange={(e) => setCategory(e.target.value)}
-						autoFocus
 						required
+						disabled={loading || categoryLoading}
+						autoFocus={!loading && !categoryLoading}
 					/>
 				</div>
 
@@ -58,17 +62,29 @@ const Category = () => {
 	};
 
 	const loadCategories = async () => {
-		setCategoryLoading(true);
 		try {
 			const response = await getCategories();
-			// console.log(response);
 			const { categories } = response.data;
 			setAllCategories(categories);
-			setCategoryLoading(false);
 		} catch (error) {
 			console.log(error);
-			setCategoryLoading(false);
 			toast.error(`${error.response.data.message}`);
+		}
+	};
+
+	const handleRemoveCategory = async (slug) => {
+		setLoading(true);
+		if (window.confirm("Are you sure you want to delete?")) {
+			try {
+				const response = await removeCategory(slug, user.token);
+				setLoading(false);
+				toast.success(response.data.message);
+				loadCategories();
+			} catch (error) {
+				setLoading(true);
+				console.log(error.response.data);
+				toast.error(error.response.data.message);
+			}
 		}
 	};
 
@@ -95,7 +111,23 @@ const Category = () => {
 						<h4 className="text-danger">No Categories found</h4>
 					)}
 
-					{!categoryLoading && allCategories.map((cat, index) => <div key={index}>{cat.name}</div>)}
+					{!categoryLoading &&
+						allCategories.map((cat, index) => (
+							<div key={index} className="alert alert-secondary">
+								{cat.name}
+								<span
+									className="btn btn-sm float-end"
+									onClick={() => handleRemoveCategory(cat.slug)}
+								>
+									<DeleteOutlined className="text-danger" />
+								</span>
+								<Link to={`/admin/category/${cat.slug}`}>
+									<span className="btn btn-sm float-end">
+										<EditOutlined className="text-warning" />
+									</span>
+								</Link>
+							</div>
+						))}
 				</div>
 			</div>
 		</div>
