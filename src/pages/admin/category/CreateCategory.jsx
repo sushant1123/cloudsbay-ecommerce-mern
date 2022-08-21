@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { Button } from "antd";
 
 import AdminNav from "../../../components/nav/AdminNav";
 
 import { createCategory, removeCategory, getCategories } from "../../../api's/category";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import CategoryForm from "../../../components/forms/CategoryForm";
 
-const Category = () => {
+const CreateCategory = () => {
 	const [category, setCategory] = useState("");
 	const [allCategories, setAllCategories] = useState([]);
 	const [loading, setLoading] = useState(false);
+	// eslint-disable-next-line
 	const [categoryLoading, setCategoryLoading] = useState(false);
 
 	const { user } = useSelector((state) => state);
@@ -31,34 +32,6 @@ const Category = () => {
 			setLoading(false);
 			toast.error(error.response.data.message);
 		}
-	};
-
-	const categoryForm = () => {
-		return (
-			<form>
-				<div className="form-group">
-					<label htmlFor="" className="form-label">
-						Category Name
-					</label>
-
-					<input
-						type="text"
-						className="form-control"
-						value={category}
-						onChange={(e) => setCategory(e.target.value)}
-						required
-						disabled={loading || categoryLoading}
-						autoFocus={!loading && !categoryLoading}
-					/>
-				</div>
-
-				<br />
-
-				<Button type="primary" onClick={handleCategorySubmit} disabled={!category || loading}>
-					Create
-				</Button>
-			</form>
-		);
 	};
 
 	const loadCategories = async () => {
@@ -101,7 +74,12 @@ const Category = () => {
 				<div className="col-md-10">
 					{loading && <h4 className="text-danger">Loading....</h4>}
 					{!loading && <h4>Create Category</h4>}
-					{categoryForm()}
+					<CategoryForm
+						category={category}
+						handleCategorySubmit={handleCategorySubmit}
+						setCategory={setCategory}
+						loading={loading}
+					/>
 
 					<br />
 					<hr />
@@ -134,4 +112,4 @@ const Category = () => {
 	);
 };
 
-export default Category;
+export default CreateCategory;
