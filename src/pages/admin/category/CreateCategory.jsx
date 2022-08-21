@@ -8,11 +8,14 @@ import { createCategory, removeCategory, getCategories } from "../../../api's/ca
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import CategoryForm from "../../../components/forms/CategoryForm";
+import LocalSearch from "../../../components/forms/LocalSearch";
 
 const CreateCategory = () => {
 	const [category, setCategory] = useState("");
 	const [allCategories, setAllCategories] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [search, setSearch] = useState("");
+
 	// eslint-disable-next-line
 	const [categoryLoading, setCategoryLoading] = useState(false);
 
@@ -61,6 +64,10 @@ const CreateCategory = () => {
 		}
 	};
 
+	const searchedCategories = (search) => (cat) => {
+		return cat.name.toLowerCase().includes(search);
+	};
+
 	useEffect(() => {
 		loadCategories();
 	}, []);
@@ -84,13 +91,17 @@ const CreateCategory = () => {
 					<br />
 					<hr />
 
+					<LocalSearch value={search} setValue={setSearch} />
+
+					<br />
+
 					{categoryLoading && <h4 className="text-danger">Loading...</h4>}
 					{!categoryLoading && !allCategories.length && (
 						<h4 className="text-danger">No Categories found</h4>
 					)}
 
 					{!categoryLoading &&
-						allCategories.map((cat, index) => (
+						allCategories.filter(searchedCategories(search)).map((cat, index) => (
 							<div key={index} className="alert alert-secondary">
 								{cat.name}
 								<span
