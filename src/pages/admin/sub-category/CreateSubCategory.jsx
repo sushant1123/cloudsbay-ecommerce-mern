@@ -4,15 +4,18 @@ import { useSelector } from "react-redux";
 
 import AdminNav from "../../../components/nav/AdminNav";
 
-import { createCategory, removeCategory, getCategories } from "../../../api's/category";
+import { createSubCategory, removeSubCategory, getSubCategories } from "../../../api's/sub-category";
+import { getCategories } from "../../../api's/category";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import CategoryForm from "../../../components/forms/CategoryForm";
 import LocalSearch from "../../../components/forms/LocalSearch";
 
-const CreateCategory = () => {
+const CreateSubCategory = () => {
 	const [category, setCategory] = useState("");
+	const [parentCategory, setParentCategory] = useState("");
 	const [allCategories, setAllCategories] = useState([]);
+	const [allSubCategories, setAllSubCategories] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [search, setSearch] = useState("");
 
@@ -25,15 +28,30 @@ const CreateCategory = () => {
 		e.preventDefault();
 		setLoading(true);
 		try {
-			const response = await createCategory(category, user.token);
+			const response = await createSubCategory(
+				{ subCategory: category, parent: parentCategory },
+				user.token
+			);
 			setLoading(false);
 
-			toast.success(`${response.data.message}}`);
+			toast.success(`${response.data.message}`);
 			setCategory("");
-			loadCategories();
+			loadSubCategories();
 		} catch (error) {
 			setLoading(false);
 			toast.error(error.response.data.message);
+		}
+	};
+
+	const loadSubCategories = async () => {
+		try {
+			const response = await getSubCategories();
+			const { subCategories } = response.data;
+			console.log({ subCategories });
+			setAllSubCategories(subCategories);
+		} catch (error) {
+			console.log(error);
+			toast.error(`${error.response.data.message}`);
 		}
 	};
 
@@ -52,10 +70,10 @@ const CreateCategory = () => {
 		setLoading(true);
 		if (window.confirm("Are you sure you want to delete?")) {
 			try {
-				const response = await removeCategory(slug, user.token);
+				const response = await removeSubCategory(slug, user.token);
 				setLoading(false);
 				toast.success(response.data.message);
-				loadCategories();
+				loadSubCategories();
 			} catch (error) {
 				setLoading(true);
 				console.log(error.response.data);
@@ -70,6 +88,7 @@ const CreateCategory = () => {
 
 	useEffect(() => {
 		loadCategories();
+		loadSubCategories();
 	}, []);
 
 	return (
@@ -80,7 +99,29 @@ const CreateCategory = () => {
 				</div>
 				<div className="col-md-10">
 					{loading && <h4 className="text-danger">Loading....</h4>}
-					{!loading && <h4>Create Category</h4>}
+					{!loading && <h4>Create Sub Category</h4>}
+
+					<div className="form-group mb-3">
+						<label htmlFor="category-select" className="form-label">
+							Parent Category
+						</label>
+						<select
+							name="category"
+							id="category-select"
+							className="form-select"
+							onChange={(e) => setParentCategory(e.target.value)}
+							value={parentCategory}
+						>
+							<option>Please Select a Parent Category</option>
+							{allCategories &&
+								allCategories.map((cat) => (
+									<option key={cat._id} value={cat._id}>
+										{cat.name}
+									</option>
+								))}
+						</select>
+					</div>
+
 					<CategoryForm
 						category={category}
 						handleCategorySubmit={handleCategorySubmit}
@@ -100,7 +141,7 @@ const CreateCategory = () => {
 					)}
 
 					{!categoryLoading &&
-						allCategories.filter(searchedCategories(search)).map((cat, index) => (
+						allSubCategories.filter(searchedCategories(search)).map((cat, index) => (
 							<div key={index} className="alert alert-secondary">
 								{cat.name}
 								<span
@@ -109,7 +150,7 @@ const CreateCategory = () => {
 								>
 									<DeleteOutlined className="text-danger" />
 								</span>
-								<Link to={`/admin/category/${cat.slug}`}>
+								<Link to={`/admin/sub-category/${cat.slug}`}>
 									<span className="btn btn-sm float-end">
 										<EditOutlined className="text-warning" />
 									</span>
@@ -122,4 +163,4 @@ const CreateCategory = () => {
 	);
 };
 
-export default CreateCategory;
+export default CreateSubCategory;

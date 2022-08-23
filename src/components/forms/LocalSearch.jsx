@@ -7,15 +7,13 @@ const LocalSearch = ({ value, setValue }) => {
 	};
 
 	return (
-		<div className="pt-4 pb-4">
-			<input
-				type="text"
-				placeholder="Filter"
-				className="form-control"
-				value={value}
-				onChange={handleInputChange}
-			/>
-		</div>
+		<input
+			type="text"
+			placeholder="Filter"
+			className="form-control"
+			value={value}
+			onChange={handleInputChange}
+		/>
 	);
 };
 
