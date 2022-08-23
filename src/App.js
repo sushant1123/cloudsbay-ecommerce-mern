@@ -20,15 +20,16 @@ import Coupons from "./pages/admin/Coupons";
 import CreateCategory from "./pages/admin/category/CreateCategory";
 import UpdateCategory from "./pages/admin/category/UpdateCategory";
 import CreateSubCategory from "./pages/admin/sub-category/CreateSubCategory";
+import UpdateSubCategory from "./pages/admin/sub-category/UpdateSubCategory";
 
 import UserRoute from "./components/routes/UserRoute";
 import AdminRoute from "./components/routes/AdminRoute";
 
-import "react-toastify/dist/ReactToastify.css";
-
+import { auth } from "./firebase";
 import { loggedInUser } from "./redux/index.actions";
 import { currentUser } from "./api's/auth";
-import { auth } from "./firebase";
+
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -73,8 +74,8 @@ const App = () => {
 				<AdminRoute path="/admin/products" component={Products} />
 				<AdminRoute exact path="/admin/category" component={CreateCategory} />
 				<AdminRoute exact path="/admin/category/:slug" component={UpdateCategory} />
-				<AdminRoute path="/admin/sub-category" component={CreateSubCategory} />
-
+				<AdminRoute exact path="/admin/sub-category" component={CreateSubCategory} />
+				<AdminRoute path="/admin/sub-category/:slug" component={UpdateSubCategory} />
 				<AdminRoute path="/admin/coupons" component={Coupons} />
 			</Switch>
 			<ToastContainer theme="colored" pauseOnFocusLoss={false} />

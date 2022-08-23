@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 
+import CategoryForm from "../../../components/forms/CategoryForm";
+import LocalSearch from "../../../components/forms/LocalSearch";
 import AdminNav from "../../../components/nav/AdminNav";
 
 import { createSubCategory, removeSubCategory, getSubCategories } from "../../../api's/sub-category";
 import { getCategories } from "../../../api's/category";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
-import CategoryForm from "../../../components/forms/CategoryForm";
-import LocalSearch from "../../../components/forms/LocalSearch";
 
 const CreateSubCategory = () => {
 	const [category, setCategory] = useState("");
@@ -36,6 +36,7 @@ const CreateSubCategory = () => {
 
 			toast.success(`${response.data.message}`);
 			setCategory("");
+			setParentCategory("");
 			loadSubCategories();
 		} catch (error) {
 			setLoading(false);
