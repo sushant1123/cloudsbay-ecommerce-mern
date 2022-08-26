@@ -14,13 +14,14 @@ import History from "./pages/user/History";
 import Password from "./pages/user/Password";
 import WishList from "./pages/user/WishList";
 import AdminDashboard from "./pages/admin/Dashboard";
-import Product from "./pages/admin/Product";
+// import Product from "./pages/admin/Product";
 import Products from "./pages/admin/Products";
 import Coupons from "./pages/admin/Coupons";
 import CreateCategory from "./pages/admin/category/CreateCategory";
 import UpdateCategory from "./pages/admin/category/UpdateCategory";
 import CreateSubCategory from "./pages/admin/sub-category/CreateSubCategory";
 import UpdateSubCategory from "./pages/admin/sub-category/UpdateSubCategory";
+import CreateProduct from "./pages/admin/product/CreateProduct";
 
 import UserRoute from "./components/routes/UserRoute";
 import AdminRoute from "./components/routes/AdminRoute";
@@ -70,7 +71,7 @@ const App = () => {
 				<UserRoute path="/user/password" component={Password} />
 				<UserRoute path="/user/wishlist" component={WishList} />
 				<AdminRoute path="/admin/dashboard" component={AdminDashboard} />
-				<AdminRoute path="/admin/product" component={Product} />
+				<AdminRoute path="/admin/product" component={CreateProduct} />
 				<AdminRoute path="/admin/products" component={Products} />
 				<AdminRoute exact path="/admin/category" component={CreateCategory} />
 				<AdminRoute exact path="/admin/category/:slug" component={UpdateCategory} />
