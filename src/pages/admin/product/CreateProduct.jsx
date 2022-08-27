@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { Button } from "antd";
 
 import AdminNav from "../../../components/nav/AdminNav";
 import LocalSearch from "../../../components/forms/LocalSearch";
 
 import { createProduct } from "../../../api's/product";
+import { getCategories } from "../../../api's/category";
+import ProductForm from "../../../components/forms/ProductForm";
 
 const initialProductValues = {
-	title: "",
-	description: "",
-	price: "",
+	title: "M1 Pro MacBook Pro",
+	description: "This is a MacBook Pro laptop with M1 Pro chip.",
+	price: "175000",
 	category: "",
 	categories: [],
 	subCategory: [],
-	shipping: "",
-	quantity: "",
-	color: "",
-	brand: "",
+	shipping: "Yes",
+	quantity: "100",
+	color: "Black",
+	brand: "Apple",
 	images: [],
 	colors: ["Black", "Brown", "Silver", "Blue", "White"],
 	brands: ["Apple", "Dell", "Samsung", "Microsoft", "Lenovo", "Asus"],
@@ -26,6 +27,9 @@ const initialProductValues = {
 
 const CreateProduct = () => {
 	const [productValues, setProductValues] = useState(initialProductValues);
+	const [loading, setLoading] = useState(false);
+
+	const { user } = useSelector((state) => state);
 
 	const onChangeHandler = (e) => {
 		const { name, value } = e.target;
@@ -33,21 +37,45 @@ const CreateProduct = () => {
 		setProductValues((prevValues) => ({ ...prevValues, [name]: value }));
 	};
 
-	const {
-		title,
-		description,
-		price,
-		category,
-		categories,
-		subCategory,
-		shipping,
-		quantity,
-		color,
-		brand,
-		images,
-		colors,
-		brands,
-	} = productValues;
+	const handleProductSubmit = async (e) => {
+		e.preventDefault();
+		setLoading(true);
+		try {
+			const response = await createProduct(productValues, user.token);
+			console.log({ response });
+			setLoading(false);
+
+			window.alert(`Product "${response.data.product.title}" created successfully.`);
+			toast.success(`${response.data.message}`);
+
+			setTimeout(() => {
+				window.location.reload();
+			}, 5000);
+		} catch (error) {
+			console.log(error);
+			setLoading(false);
+			if (error.response.status === 500) {
+				toast.error("Something went wrong. Please try again later");
+			} else {
+				toast.error(`${error.response.data.message}`);
+			}
+		}
+	};
+
+	const loadCategories = async () => {
+		try {
+			const response = await getCategories();
+			const { categories } = response.data;
+			setProductValues((prevValues) => ({ ...prevValues, categories }));
+		} catch (error) {
+			console.log(error);
+			toast.error(`${error.response.data.message}`);
+		}
+	};
+
+	useEffect(() => {
+		loadCategories();
+	}, []);
 
 	return (
 		<div className="container-fluid">
@@ -56,128 +84,15 @@ const CreateProduct = () => {
 					<AdminNav />
 				</div>
 				<div className="col-md-10">
-					<h4>Create Product</h4>
+					{loading ? <h4 className="text-danger">Loading....</h4> : <h4>Create Product</h4>}
 
 					<hr />
 
-					<form>
-						<div className="form-group mb-3">
-							<label htmlFor="title" className="form-label">
-								Title
-							</label>
-							<input
-								type="text"
-								className="form-control"
-								name="title"
-								id="title"
-								value={title}
-								onChange={onChangeHandler}
-							/>
-						</div>
-
-						<div className="form-group mb-3">
-							<label htmlFor="title" className="form-label">
-								Description
-							</label>
-							<input
-								type="text"
-								className="form-control"
-								name="description"
-								id="description"
-								value={description}
-								onChange={onChangeHandler}
-							/>
-						</div>
-
-						<div className="form-group mb-3">
-							<label htmlFor="title" className="form-label">
-								Price
-							</label>
-							<input
-								type="text"
-								className="form-control"
-								name="price"
-								id="price"
-								value={price}
-								onChange={onChangeHandler}
-							/>
-						</div>
-
-						<div className="form-group mb-3">
-							<label htmlFor="title" className="form-label">
-								Shipping
-							</label>
-							<select
-								name="shipping"
-								id="shipping"
-								className="form-select"
-								value={shipping}
-								onChange={onChangeHandler}
-							>
-								<option>Please Select</option>
-								<option value="No">No</option>
-								<option value="Yes">Yes</option>
-							</select>
-						</div>
-
-						<div className="form-group mb-3">
-							<label htmlFor="title" className="form-label">
-								Quantity
-							</label>
-							<input
-								type="text"
-								className="form-control"
-								name="quantity"
-								id="quantity"
-								value={quantity}
-								onChange={onChangeHandler}
-							/>
-						</div>
-
-						<div className="form-group mb-3">
-							<label htmlFor="title" className="form-label">
-								Color
-							</label>
-							<select
-								name="colors"
-								id="colors"
-								className="form-select"
-								value={colors}
-								onChange={onChangeHandler}
-							>
-								<option>Please Select</option>
-								{colors.map((c, index) => (
-									<option key={index} value={c}>
-										{c}
-									</option>
-								))}
-							</select>
-						</div>
-
-						<div className="form-group mb-3">
-							<label htmlFor="title" className="form-label">
-								Brand
-							</label>
-							<select
-								name="brand"
-								id="brand"
-								className="form-select"
-								value={brand}
-								onChange={onChangeHandler}
-							>
-								<option>Please Select</option>
-								{brands.map((b, index) => (
-									<option key={index} value={b}>
-										{b}
-									</option>
-								))}
-							</select>
-						</div>
-
-						<Button type="primary" onClick={() => {}}>
-							Save
-						</Button>
-					</form>
+					<ProductForm
+						handleSubmit={handleProductSubmit}
+						handleOnChange={onChangeHandler}
+						productValues={productValues}
+					/>
 				</div>
 			</div>
 		</div>
