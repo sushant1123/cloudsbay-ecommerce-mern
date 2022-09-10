@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
 import AdminNav from "../../../components/nav/AdminNav";
-import LocalSearch from "../../../components/forms/LocalSearch";
+// import LocalSearch from "../../../components/forms/LocalSearch";
 
 import { createProduct } from "../../../api's/product";
 import { getCategories, getSubCategory } from "../../../api's/category";
