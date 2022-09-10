@@ -6,7 +6,7 @@ import AdminNav from "../../../components/nav/AdminNav";
 import LocalSearch from "../../../components/forms/LocalSearch";
 
 import { createProduct } from "../../../api's/product";
-import { getCategories } from "../../../api's/category";
+import { getCategories, getSubCategory } from "../../../api's/category";
 import ProductForm from "../../../components/forms/ProductForm";
 
 const initialProductValues = {
@@ -15,7 +15,7 @@ const initialProductValues = {
 	price: "175000",
 	category: "",
 	categories: [],
-	subCategory: [],
+	subCategories: [],
 	shipping: "Yes",
 	quantity: "100",
 	color: "Black",
@@ -27,14 +27,31 @@ const initialProductValues = {
 
 const CreateProduct = () => {
 	const [productValues, setProductValues] = useState(initialProductValues);
+	const [subCategoryOptions, setSubCategoryOptions] = useState([]);
+	const [showSubCategoryOptions, setShowSubCategoryOptions] = useState(false);
 	const [loading, setLoading] = useState(false);
 
 	const { user } = useSelector((state) => state);
 
 	const onChangeHandler = (e) => {
 		const { name, value } = e.target;
-
 		setProductValues((prevValues) => ({ ...prevValues, [name]: value }));
+	};
+
+	const onChangeCategoryHandler = async (e) => {
+		const { name, value } = e.target;
+		console.log("category", value);
+		setProductValues((prevValues) => ({ ...prevValues, [name]: value, subCategories: [] }));
+		setShowSubCategoryOptions(true);
+
+		try {
+			const response = await getSubCategory(value);
+			const { subCategories } = response.data;
+			setSubCategoryOptions(subCategories);
+		} catch (error) {
+			console.log(error);
+			toast.error(`${error.response.data.message}`);
+		}
 	};
 
 	const handleProductSubmit = async (e) => {
@@ -92,6 +109,9 @@ const CreateProduct = () => {
 						handleSubmit={handleProductSubmit}
 						handleOnChange={onChangeHandler}
 						productValues={productValues}
+						onChangeCategoryHandler={onChangeCategoryHandler}
+						showSubCategoryOptions={showSubCategoryOptions}
+						subCategoryOptions={subCategoryOptions}
 					/>
 				</div>
 			</div>

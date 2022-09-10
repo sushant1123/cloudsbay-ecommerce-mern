@@ -1,14 +1,23 @@
 import React from "react";
-import { Button } from "antd";
+import { Button, Select } from "antd";
 
-const ProductForm = ({ productValues, handleSubmit, handleOnChange }) => {
+const { Option } = Select;
+
+const ProductForm = ({
+	productValues,
+	handleSubmit,
+	handleOnChange,
+	onChangeCategoryHandler,
+	showSubCategoryOptions,
+	subCategoryOptions,
+}) => {
 	const {
 		title,
 		description,
 		price,
 		category,
 		categories,
-		subCategory,
+		subCategories,
 		shipping,
 		quantity,
 		color,
@@ -17,6 +26,15 @@ const ProductForm = ({ productValues, handleSubmit, handleOnChange }) => {
 		colors,
 		brands,
 	} = productValues;
+
+	const children = [];
+	subCategoryOptions.map((cat) =>
+		children.push(
+			<Option key={cat._id} value={cat._id}>
+				{cat.name}
+			</Option>
+		)
+	);
 
 	return (
 		<form>
@@ -102,7 +120,7 @@ const ProductForm = ({ productValues, handleSubmit, handleOnChange }) => {
 					id="category"
 					className="form-select"
 					value={category}
-					onChange={handleOnChange}
+					onChange={onChangeCategoryHandler}
 				>
 					<option>Please Select</option>
 					{categories.map((cat) => (
@@ -113,12 +131,25 @@ const ProductForm = ({ productValues, handleSubmit, handleOnChange }) => {
 				</select>
 			</div>
 
-			{category && (
+			{showSubCategoryOptions && (
 				<div className="form-group mb-3">
-					<label htmlFor="subCategory" className="form-label">
-						Sub Category
+					<label htmlFor="subCategories" className="form-label">
+						Sub Categories
 					</label>
-					<select
+					<Select
+						mode="multiple"
+						allowClear
+						id="subCategories"
+						value={subCategories}
+						style={{ width: "100%" }}
+						placeholder="Please Select"
+						onChange={(e) => {
+							handleOnChange({ target: { name: "subCategories", value: e } });
+						}}
+					>
+						{children}
+					</Select>
+					{/* <select
 						name="subCategory"
 						id="subCategory"
 						className="form-select"
@@ -126,12 +157,12 @@ const ProductForm = ({ productValues, handleSubmit, handleOnChange }) => {
 						onChange={handleOnChange}
 					>
 						<option>Please Select</option>
-						{categories.map((cat) => (
+						{subCategoryOptions.map((cat) => (
 							<option key={cat._id} value={cat._id}>
 								{cat.name}
 							</option>
 						))}
-					</select>
+					</select> */}
 				</div>
 			)}
 
