@@ -22,7 +22,7 @@ const ProductForm = ({
 		quantity,
 		color,
 		brand,
-		images,
+		// images,
 		colors,
 		brands,
 	} = productValues;
