@@ -52,7 +52,7 @@ const Login = ({ history }) => {
 			roleBasedRedirect(response, history);
 		} catch (error) {
 			console.log(error);
-			toast.error(error.message);
+			toast.error(error.response.data.message);
 			setLoading(false);
 		}
 	};
@@ -76,7 +76,7 @@ const Login = ({ history }) => {
 			// history.push("/");
 		} catch (error) {
 			console.log(error);
-			toast.error(error.message);
+			toast.error(error.response.data.message);
 		}
 	};
 
