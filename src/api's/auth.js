@@ -1,8 +1,11 @@
 import axios from "axios";
+import { getURL } from "./config";
+
+const REACT_APP_API_URL = getURL();
 
 export const createOrUpdateUser = async (authtoken) => {
 	return await axios.post(
-		`${process.env.REACT_APP_API}/create-or-update-user`,
+		`${REACT_APP_API_URL}/create-or-update-user`,
 		{},
 		{
 			headers: {
@@ -14,7 +17,7 @@ export const createOrUpdateUser = async (authtoken) => {
 
 export const currentUser = async (authtoken) => {
 	return await axios.post(
-		`${process.env.REACT_APP_API}/current-user`,
+		`${REACT_APP_API_URL}/current-user`,
 		{},
 		{
 			headers: {
@@ -26,7 +29,7 @@ export const currentUser = async (authtoken) => {
 
 export const currentAdmin = async (authtoken) => {
 	return await axios.post(
-		`${process.env.REACT_APP_API}/current-admin`,
+		`${REACT_APP_API_URL}/current-admin`,
 		{},
 		{
 			headers: {
