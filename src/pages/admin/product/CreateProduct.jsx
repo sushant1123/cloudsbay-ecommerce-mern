@@ -3,11 +3,12 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
 import AdminNav from "../../../components/nav/AdminNav";
+import ProductForm from "../../../components/forms/ProductForm";
+import FileUpload from "../../../components/forms/FileUpload";
 // import LocalSearch from "../../../components/forms/LocalSearch";
 
 import { createProduct } from "../../../api's/product";
 import { getCategories, getSubCategory } from "../../../api's/category";
-import ProductForm from "../../../components/forms/ProductForm";
 
 const initialProductValues = {
 	title: "M1 Pro MacBook Pro",
@@ -103,6 +104,8 @@ const CreateProduct = () => {
 				<div className="col-md-10">
 					{loading ? <h4 className="text-danger">Loading....</h4> : <h4>Create Product</h4>}
 
+					<hr />
+					<FileUpload />
 					<hr />
 
 					<ProductForm
