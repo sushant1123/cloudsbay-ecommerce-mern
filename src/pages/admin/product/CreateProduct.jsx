@@ -105,7 +105,15 @@ const CreateProduct = () => {
 					{loading ? <h4 className="text-danger">Loading....</h4> : <h4>Create Product</h4>}
 
 					<hr />
-					<FileUpload />
+
+					{loading && "Loading...."}
+					{!loading && JSON.stringify(productValues.images)}
+					<hr />
+					<FileUpload
+						productValues={productValues}
+						setProductValues={setProductValues}
+						setLoading={setLoading}
+					/>
 					<hr />
 
 					<ProductForm
