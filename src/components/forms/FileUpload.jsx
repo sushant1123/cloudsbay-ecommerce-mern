@@ -1,9 +1,9 @@
 import React from "react";
-import axios from "axios";
 import Resizer from "react-image-file-resizer";
 import { useSelector } from "react-redux";
+import { Avatar, Badge } from "antd";
 
-import { uploadFile } from "../../api's/file-upload";
+import { uploadFile, deleteFile } from "../../api's/file-upload";
 
 const FileUpload = ({ productValues, setProductValues, setLoading }) => {
 	const { user } = useSelector((state) => state);
@@ -38,22 +38,56 @@ const FileUpload = ({ productValues, setProductValues, setLoading }) => {
 					},
 					"base64"
 				);
-				setLoading(false);
 			}
 		}
 	};
 
+	const handleRemoveUploadedImage = async (public_id) => {
+		setLoading(true);
+		try {
+			let response = await deleteFile(public_id, user.token || "");
+			if (response.data.status === "success") {
+				let remainingImages = productValues.images.filter((img) => img.public_id !== public_id);
+				console.log(remainingImages);
+				setProductValues((prev) => ({ ...prev, images: remainingImages }));
+			}
+			setLoading(false);
+		} catch (error) {
+			setLoading(false);
+			console.log({ message: "cloudinary remove error", error });
+		}
+	};
+
 	return (
-		<div className="row">
-			<label htmlFor="file-upload">Choose File</label>
-			<input
-				type="file"
-				className="form-control"
-				multiple
-				id="file-upload"
-				accept="images/*"
-				onChange={handleFileUpload}
-			/>
+		<div className="m-3">
+			<div className="row mb-3">
+				<input
+					type="file"
+					className="form-control"
+					multiple
+					id="file-upload"
+					accept="images/*"
+					onChange={handleFileUpload}
+				/>
+			</div>
+			<div className="row">
+				{productValues.images?.map((image, index) => (
+					<div
+						key={image.public_id}
+						className={`col-md-2 ${index / 6 >= 1 && "mt-3"}`}
+						onClick={() => handleRemoveUploadedImage(image.public_id)}
+					>
+						<Badge count={"X"} style={{ cursor: "pointer" }}>
+							<Avatar
+								src={image.url}
+								size={100}
+								shape="square"
+								// className="ml-3"
+							/>
+						</Badge>
+					</div>
+				))}
+			</div>
 		</div>
 	);
 };

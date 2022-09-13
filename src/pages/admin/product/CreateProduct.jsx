@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { LoadingOutlined } from "@ant-design/icons";
 
 import AdminNav from "../../../components/nav/AdminNav";
 import ProductForm from "../../../components/forms/ProductForm";
@@ -102,13 +103,10 @@ const CreateProduct = () => {
 					<AdminNav />
 				</div>
 				<div className="col-md-10">
-					{loading ? <h4 className="text-danger">Loading....</h4> : <h4>Create Product</h4>}
+					{loading ? <LoadingOutlined className="text-danger h1" /> : <h4>Create Product</h4>}
 
 					<hr />
 
-					{loading && "Loading...."}
-					{!loading && JSON.stringify(productValues.images)}
-					<hr />
 					<FileUpload
 						productValues={productValues}
 						setProductValues={setProductValues}
