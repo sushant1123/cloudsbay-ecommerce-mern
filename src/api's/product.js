@@ -8,6 +8,6 @@ export const createProduct = async (product, authtoken) => {
 	return await axios.post(`${REACT_APP_API_URL}/product`, { ...product }, { headers: { authtoken } });
 };
 
-export const getProducts = async () => {
-	return await axios.get(`${REACT_APP_API_URL}/products`);
+export const getProducts = async (count) => {
+	return await axios.get(`${REACT_APP_API_URL}/products/${count}`);
 };
