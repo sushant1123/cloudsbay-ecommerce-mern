@@ -32,9 +32,9 @@ const Products = () => {
 	}, []);
 
 	const deleteProductBySlug = async (slug) => {
-		setLoading(true);
 		let answer = window.confirm("Are you sure you want to delete this product?");
 		if (answer) {
+			setLoading(true);
 			try {
 				const response = await deleteProduct(slug, user?.token || "");
 				toast.success(`${response.data.message}`);
