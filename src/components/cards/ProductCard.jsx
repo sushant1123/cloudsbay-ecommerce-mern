@@ -1,16 +1,17 @@
 import React from "react";
 import { Card } from "antd";
-import DefaultImage from "../../images/default.png";
 
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import DefaultImage from "../../images/default.png";
 
 const { Meta } = Card;
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, deleteProduct, loading }) => {
 	return (
 		<Card
 			hoverable
 			style={{ width: 240 }}
+			loading={loading}
 			cover={
 				<img
 					alt={product.title}
@@ -21,7 +22,11 @@ const ProductCard = ({ product }) => {
 			}
 			actions={[
 				<EditOutlined key="edit" className="text-warning" />,
-				<DeleteOutlined key="delete" className="text-danger" />,
+				<DeleteOutlined
+					key="delete"
+					className="text-danger"
+					onClick={() => deleteProduct(product.slug)}
+				/>,
 			]}
 		>
 			<Meta
