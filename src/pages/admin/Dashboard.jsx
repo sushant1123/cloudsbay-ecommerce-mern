@@ -1,4 +1,5 @@
 import React from "react";
+
 import AdminNav from "../../components/nav/AdminNav";
 
 const Dashboard = () => {
@@ -8,7 +9,10 @@ const Dashboard = () => {
 				<div className="col-md-2">
 					<AdminNav />
 				</div>
-				<div className="col-md-10">Admin Dashboard</div>
+
+				<div className="col-md-10">
+					<h2>Admin Dashboard</h2>
+				</div>
 			</div>
 		</div>
 	);
