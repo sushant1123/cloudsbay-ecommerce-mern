@@ -3,20 +3,20 @@ import { Button, Select } from "antd";
 
 const { Option } = Select;
 
-const ProductForm = ({
+const UpdateProductForm = ({
 	productValues,
 	handleSubmit,
 	handleOnChange,
 	onChangeCategoryHandler,
 	showSubCategoryOptions,
 	subCategoryOptions,
+	categories,
 }) => {
 	const {
 		title,
 		description,
 		price,
 		category,
-		categories,
 		subCategories,
 		shipping,
 		quantity,
@@ -131,7 +131,7 @@ const ProductForm = ({
 				</select>
 			</div>
 
-			{showSubCategoryOptions && (
+			{category && (
 				<div className="form-group mb-3">
 					<label htmlFor="subCategories" className="form-label">
 						Sub Categories
@@ -149,20 +149,6 @@ const ProductForm = ({
 					>
 						{children}
 					</Select>
-					{/* <select
-						name="subCategory"
-						id="subCategory"
-						className="form-select"
-						value={subCategory}
-						onChange={handleOnChange}
-					>
-						<option>Please Select</option>
-						{subCategoryOptions.map((cat) => (
-							<option key={cat._id} value={cat._id}>
-								{cat.name}
-							</option>
-						))}
-					</select> */}
 				</div>
 			)}
 
@@ -177,7 +163,7 @@ const ProductForm = ({
 					value={color}
 					onChange={handleOnChange}
 				>
-					<option>Please Select</option>
+					{/* <option>Please Select</option> */}
 					{colors.map((c, index) => (
 						<option key={index} value={c}>
 							{c}
@@ -197,7 +183,7 @@ const ProductForm = ({
 					value={brand}
 					onChange={handleOnChange}
 				>
-					<option>Please Select</option>
+					{/* <option>Please Select</option> */}
 					{brands.map((b, index) => (
 						<option key={index} value={b}>
 							{b}
@@ -213,4 +199,4 @@ const ProductForm = ({
 	);
 };
 
-export default ProductForm;
+export default UpdateProductForm;
