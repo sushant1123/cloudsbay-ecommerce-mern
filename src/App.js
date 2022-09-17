@@ -15,7 +15,7 @@ import Password from "./pages/user/Password";
 import WishList from "./pages/user/WishList";
 import AdminDashboard from "./pages/admin/Dashboard";
 // import Product from "./pages/admin/Product";
-import Products from "./pages/admin/Products";
+import Products from "./pages/admin/product/Products";
 import Coupons from "./pages/admin/Coupons";
 import CreateCategory from "./pages/admin/category/CreateCategory";
 import UpdateCategory from "./pages/admin/category/UpdateCategory";
@@ -31,6 +31,7 @@ import { loggedInUser } from "./redux/index.actions";
 import { currentUser } from "./api's/auth";
 
 import "react-toastify/dist/ReactToastify.css";
+import UpdateProduct from "./pages/admin/product/UpdateProduct";
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -71,7 +72,8 @@ const App = () => {
 				<UserRoute path="/user/password" component={Password} />
 				<UserRoute path="/user/wishlist" component={WishList} />
 				<AdminRoute path="/admin/dashboard" component={AdminDashboard} />
-				<AdminRoute path="/admin/product" component={CreateProduct} />
+				<AdminRoute exact path="/admin/product" component={CreateProduct} />
+				<AdminRoute path="/admin/product/:slug" component={UpdateProduct} />
 				<AdminRoute path="/admin/products" component={Products} />
 				<AdminRoute exact path="/admin/category" component={CreateCategory} />
 				<AdminRoute exact path="/admin/category/:slug" component={UpdateCategory} />

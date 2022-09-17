@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-import AdminNav from "../../components/nav/AdminNav";
-import ProductCard from "../../components/cards/ProductCard";
+import AdminNav from "../../../components/nav/AdminNav";
+import ProductCard from "../../../components/cards/ProductCard";
 
-import { getProducts, deleteProduct } from "../../api's/product";
+import { getProducts, deleteProduct } from "../../../api's/product";
 
 const Products = () => {
 	const { user } = useSelector((state) => state);
