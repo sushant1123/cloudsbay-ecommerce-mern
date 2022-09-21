@@ -2,17 +2,17 @@ import React from "react";
 import { Card } from "antd";
 import { Link } from "react-router-dom";
 
-import { AimOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import DefaultImage from "../../images/default.png";
 
 const { Meta } = Card;
 
-const ProductCard = ({ product, loading }) => {
+const AdminProductCard = ({ product, deleteProduct, loading }) => {
 	return (
 		<Card
 			hoverable
 			style={{ width: 240 }}
-			loading={true || loading}
+			loading={loading}
 			cover={
 				<img
 					alt={product.title}
@@ -23,12 +23,12 @@ const ProductCard = ({ product, loading }) => {
 			}
 			actions={[
 				<Link to={`/admin/product/${product.slug}`}>
-					<AimOutlined key="edit" className="text-warning" />
+					<EditOutlined key="edit" className="text-warning" />
 				</Link>,
 				<DeleteOutlined
 					key="delete"
 					className="text-danger"
-					// onClick={() => deleteProduct(product.slug)}
+					onClick={() => deleteProduct(product.slug)}
 				/>,
 			]}
 		>
@@ -42,4 +42,4 @@ const ProductCard = ({ product, loading }) => {
 	);
 };
 
-export default ProductCard;
+export default AdminProductCard;

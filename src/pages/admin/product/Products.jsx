@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 import AdminNav from "../../../components/nav/AdminNav";
-import ProductCard from "../../../components/cards/ProductCard";
+import AdminProductCard from "../../../components/cards/AdminProductCard";
 
 import { getProducts, deleteProduct } from "../../../api's/product";
 
@@ -60,7 +60,7 @@ const Products = () => {
 					<div className="row">
 						{products.map((product) => (
 							<div className="col-md-3 mb-3" key={product._id}>
-								<ProductCard
+								<AdminProductCard
 									product={product}
 									deleteProduct={deleteProductBySlug}
 									loading={loading}
