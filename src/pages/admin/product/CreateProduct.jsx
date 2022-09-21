@@ -54,7 +54,7 @@ const CreateProduct = () => {
 		// 	console.log(error);
 		// 	toast.error(`${error.response.data.message}`);
 		// }
-		getSubCategoriesFromCategory();
+		getSubCategoriesFromCategory(value);
 	};
 
 	const getSubCategoriesFromCategory = async (value) => {
