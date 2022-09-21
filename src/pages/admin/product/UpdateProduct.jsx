@@ -53,7 +53,7 @@ const UpdateProduct = ({ match, history }) => {
 
 	useEffect(() => {
 		getProductBySlug();
-		//eslint-nextline-disable
+		//eslint-disable-next-line
 	}, [match.params]);
 
 	const onChangeHandler = (e) => {
