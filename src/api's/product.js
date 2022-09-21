@@ -21,7 +21,7 @@ export const deleteProduct = async (slug, authtoken) => {
 	return await axios.delete(`${REACT_APP_API_URL}/product/${slug}`, { headers: { authtoken } });
 };
 
-export const updateProduct = async (slug, authtoken) => {
+export const updateProduct = async (slug, product, authtoken) => {
 	console.log({ slug });
-	return await axios.put(`${REACT_APP_API_URL}/product/${slug}`, { headers: { authtoken } });
+	return await axios.put(`${REACT_APP_API_URL}/product/${slug}`, product, { headers: { authtoken } });
 };

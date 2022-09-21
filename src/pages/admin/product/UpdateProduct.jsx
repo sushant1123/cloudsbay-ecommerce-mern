@@ -26,7 +26,7 @@ const initialProductValues = {
 	brands: ["Apple", "Dell", "Samsung", "Microsoft", "Lenovo", "Asus"],
 };
 
-const UpdateProduct = ({ match }) => {
+const UpdateProduct = ({ match, history }) => {
 	const { user } = useSelector((state) => state);
 
 	const [productValues, setProductValues] = useState(initialProductValues);
@@ -86,16 +86,13 @@ const UpdateProduct = ({ match }) => {
 		setLoading(true);
 		try {
 			// return;
-			const response = await updateProduct(productValues, user.token);
+			const response = await updateProduct(match.params.slug, productValues, user.token);
 			console.log({ response });
 			setLoading(false);
 
-			window.alert(`Product "${response.data.product.title}" created successfully.`);
+			window.alert(`Product "${response.data.product.title}" updated successfully.`);
 			toast.success(`${response.data.message}`);
-
-			setTimeout(() => {
-				window.location.reload();
-			}, 5000);
+			history.push(`/admin/product/${response.data.product.slug}`);
 		} catch (error) {
 			console.log(error);
 			setLoading(false);
