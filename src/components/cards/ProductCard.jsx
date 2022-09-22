@@ -2,7 +2,7 @@ import React from "react";
 import { Card } from "antd";
 import { Link } from "react-router-dom";
 
-import { AimOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import DefaultImage from "../../images/default.png";
 
 const { Meta } = Card;
@@ -11,8 +11,7 @@ const ProductCard = ({ product, loading }) => {
 	return (
 		<Card
 			hoverable
-			style={{ width: 240 }}
-			loading={true || loading}
+			style={{ width: 300, marginTop: 16 }}
 			cover={
 				<img
 					alt={product.title}
@@ -22,14 +21,17 @@ const ProductCard = ({ product, loading }) => {
 				/>
 			}
 			actions={[
-				<Link to={`/admin/product/${product.slug}`}>
-					<AimOutlined key="edit" className="text-warning" />
+				<Link to={`/product/${product.slug}`}>
+					<EyeOutlined key="edit" className="text-warning" /> <br /> View Product
 				</Link>,
-				<DeleteOutlined
-					key="delete"
-					className="text-danger"
-					// onClick={() => deleteProduct(product.slug)}
-				/>,
+				<>
+					<ShoppingCartOutlined
+						key="delete"
+						className="text-danger"
+						// onClick={() => deleteProduct(product.slug)}
+					/>{" "}
+					<br /> Add to Cart
+				</>,
 			]}
 		>
 			<Meta
@@ -37,6 +39,7 @@ const ProductCard = ({ product, loading }) => {
 				description={`${product.description?.substring(0, 100)}${
 					product.description.length > 100 ? "..." : ""
 				}`}
+				style={{ height: 120 }}
 			/>
 		</Card>
 	);

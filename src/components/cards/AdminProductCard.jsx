@@ -11,7 +11,7 @@ const AdminProductCard = ({ product, deleteProduct, loading }) => {
 	return (
 		<Card
 			hoverable
-			style={{ width: 240 }}
+			style={{ width: 280 }}
 			loading={loading}
 			cover={
 				<img
@@ -37,6 +37,7 @@ const AdminProductCard = ({ product, deleteProduct, loading }) => {
 				description={`${product.description?.substring(0, 100)}${
 					product.description.length > 100 ? "..." : ""
 				}`}
+				style={{ height: 120 }}
 			/>
 		</Card>
 	);
