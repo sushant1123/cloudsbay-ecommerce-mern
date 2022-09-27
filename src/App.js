@@ -22,6 +22,7 @@ import UpdateCategory from "./pages/admin/category/UpdateCategory";
 import CreateSubCategory from "./pages/admin/sub-category/CreateSubCategory";
 import UpdateSubCategory from "./pages/admin/sub-category/UpdateSubCategory";
 import CreateProduct from "./pages/admin/product/CreateProduct";
+import UpdateProduct from "./pages/admin/product/UpdateProduct";
 
 import UserRoute from "./components/routes/UserRoute";
 import AdminRoute from "./components/routes/AdminRoute";
@@ -31,7 +32,7 @@ import { loggedInUser } from "./redux/index.actions";
 import { currentUser } from "./api's/auth";
 
 import "react-toastify/dist/ReactToastify.css";
-import UpdateProduct from "./pages/admin/product/UpdateProduct";
+import "./App.css";
 
 const App = () => {
 	const dispatch = useDispatch();

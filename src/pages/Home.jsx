@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import ProductCard from "../components/cards/ProductCard";
 import Jumbotron from "../components/Jumbotron";
 
-import { getProducts } from "../api's/product";
+import { getEnhancedProductList } from "../api's/product";
 import LoadingCard from "../components/cards/LoadingCard";
 
 let count = 3;
@@ -20,7 +20,7 @@ const Home = ({ history }) => {
 	const loadAllProducts = async () => {
 		try {
 			setLoading(true);
-			const response = await getProducts(count);
+			const response = await getEnhancedProductList("createdAt", -1, count);
 			setProducts(response.data.products);
 			// console.log(response);
 			setLoading(false);
@@ -37,6 +37,9 @@ const Home = ({ history }) => {
 	return (
 		<>
 			<Jumbotron text={["New Arrivals", "Latest Products", "Best Sellers"]} />
+
+			<h4 className="text-center p-3 mt-5 mb-5 display-4 jumbotron">New Arrivals</h4>
+
 			<div className="container">
 				<div className="row">
 					{loading && <LoadingCard count={count} />}
