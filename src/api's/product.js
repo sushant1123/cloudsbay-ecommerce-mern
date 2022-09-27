@@ -25,3 +25,8 @@ export const updateProduct = async (slug, product, authtoken) => {
 	console.log({ slug });
 	return await axios.put(`${REACT_APP_API_URL}/product/${slug}`, product, { headers: { authtoken } });
 };
+
+export const getEnhancedProductList = async (sort, order, limit) => {
+	console.log({ sort, order, limit });
+	return await axios.post(`${REACT_APP_API_URL}/products`, { sort, order, limit });
+};
