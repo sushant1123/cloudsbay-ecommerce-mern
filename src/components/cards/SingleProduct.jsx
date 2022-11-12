@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Tabs } from "antd";
 import { Link } from "react-router-dom";
-import { HeartOutlined, ShoppingCartOutlined, StarOutlined } from "@ant-design/icons";
+import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Carousel } from "react-responsive-carousel";
 
 import DefaultImage from "../../images/default.png";
