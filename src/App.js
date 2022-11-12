@@ -8,13 +8,13 @@ import Header from "./components/nav/Header";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Home from "./pages/Home";
+import Product from "./pages/Product";
 import RegisterComplete from "./pages/auth/RegisterComplete";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import History from "./pages/user/History";
 import Password from "./pages/user/Password";
 import WishList from "./pages/user/WishList";
 import AdminDashboard from "./pages/admin/Dashboard";
-// import Product from "./pages/admin/Product";
 import Products from "./pages/admin/product/Products";
 import Coupons from "./pages/admin/Coupons";
 import CreateCategory from "./pages/admin/category/CreateCategory";
@@ -65,6 +65,7 @@ const App = () => {
 			<Header />
 			<Switch>
 				<Route exact path="/" component={Home} />
+				<Route exact path="/product/:slug" component={Product} />
 				<Route path="/login" component={Login} />
 				<Route exact path="/register" component={Register} />
 				<Route path="/register/complete" component={RegisterComplete} />
