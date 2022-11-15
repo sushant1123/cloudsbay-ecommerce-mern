@@ -18,6 +18,7 @@ import { provideAReview } from "../../api's/product";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useEffect } from "react";
+import ShowAverageRating from "../ShowAverageRating";
 
 const SingleProduct = ({ product }) => {
 	const { title, images, description, ratings, _id, slug } = product;
@@ -26,7 +27,6 @@ const SingleProduct = ({ product }) => {
 	const history = useHistory();
 
 	const [star, setStar] = useState();
-	const [averageStars, setAverageStars] = useState();
 	const [comment, setComment] = useState("");
 	const [show, setShow] = useState(false);
 
@@ -62,12 +62,6 @@ const SingleProduct = ({ product }) => {
 				setStar(existingRatingByUser.star);
 				setComment(existingRatingByUser.comment);
 			}
-		}
-
-		if (ratings) {
-			let len = ratings.length;
-			let total = ratings.reduce((acc, curr) => acc + Number(curr.star));
-			setAverageStars(total / len);
 		}
 	}, [ratings, user]);
 
@@ -106,15 +100,7 @@ const SingleProduct = ({ product }) => {
 				<h1 className="bg-info p-3">{title}</h1>
 
 				<div className="d-flex justify-content-center align-items-center p-3">
-					<StarRatings
-						rating={averageStars}
-						starRatedColor="blue"
-						changeRating={(newRating, name) => changeRating(newRating, name)}
-						numberOfStars={5}
-						starDimension="30px"
-						name={_id}
-					/>
-					<span className="ms-3 fs-5">({ratings?.length})</span>
+					<ShowAverageRating product={product} />
 				</div>
 
 				<Card
