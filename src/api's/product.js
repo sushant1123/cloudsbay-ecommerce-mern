@@ -34,3 +34,8 @@ export const getEnhancedProductList = async (sort, order, page) => {
 export const getProductsCount = async () => {
 	return await axios.get(`${REACT_APP_API_URL}/products/total`);
 };
+
+export const provideAReview = async (id, rating, authtoken) => {
+	console.log({ id, rating, authtoken });
+	return await axios.put(`${REACT_APP_API_URL}/product/rating/${id}`, rating, { headers: { authtoken } });
+};

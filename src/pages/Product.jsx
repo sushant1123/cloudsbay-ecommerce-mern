@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+// import { useSelector } from "react-redux";
 
 import SingleProduct from "../components/cards/SingleProduct";
 
 import { getProduct } from "../api's/product";
 
 const Product = () => {
+	// const { user } = useSelector((state) => state);
+
 	// eslint-disable-next-line
 	const [loading, setLoading] = useState(false);
 	const [productInfo, setProductInfo] = useState({});
@@ -51,4 +54,4 @@ const Product = () => {
 	);
 };
 
-export default Product;
+export default React.memo(Product);
