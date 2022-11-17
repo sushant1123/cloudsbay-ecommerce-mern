@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const ProductInfo = ({ product }) => {
-	console.log(product);
 	const { price, category, subCategories, shipping, color, brand, sold, quantity } = product;
 	return (
 		<ul className="list-group list-group-light">

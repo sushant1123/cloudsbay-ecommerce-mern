@@ -11,10 +11,16 @@ import { loggedInUser } from "../../redux/index.actions";
 import { createOrUpdateUser } from "../../api's/auth";
 
 const roleBasedRedirect = (res, history) => {
-	if (res.data.user.role === "admin") {
-		history.push("/admin/dashboard");
+	//check if it is an intended route
+	let intended = history.location.state;
+	if (intended) {
+		history.push(intended.from);
 	} else {
-		history.push("/user/history");
+		if (res.data.user.role === "admin") {
+			history.push("/admin/dashboard");
+		} else {
+			history.push("/user/history");
+		}
 	}
 };
 
@@ -28,8 +34,12 @@ const Login = ({ history }) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (user && user.token) {
-			history.push("/");
+		let intended = history.location.state;
+		if (intended) return;
+		else {
+			if (user && user.token) {
+				history.push("/");
+			}
 		}
 	}, [user, history]);
 
