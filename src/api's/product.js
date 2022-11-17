@@ -39,3 +39,7 @@ export const provideAReview = async (id, rating, authtoken) => {
 	console.log({ id, rating, authtoken });
 	return await axios.put(`${REACT_APP_API_URL}/product/rating/${id}`, rating, { headers: { authtoken } });
 };
+
+export const getRelated = async (id) => {
+	return await axios.get(`${REACT_APP_API_URL}/product/related/${id}`);
+};

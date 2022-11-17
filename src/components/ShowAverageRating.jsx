@@ -13,7 +13,7 @@ const ShowAverageRating = ({ product }) => {
 			let len = ratingsArray.length;
 
 			let result = totalRating / len || 0;
-			console.log({ result });
+			// console.log({ result });
 			setAverageStars(result);
 		}
 	}, [product]);
