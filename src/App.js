@@ -33,6 +33,7 @@ import { currentUser } from "./api's/auth";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
+import Category from "./pages/category/Category";
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -73,6 +74,8 @@ const App = () => {
 				<UserRoute path="/user/history" component={History} />
 				<UserRoute path="/user/password" component={Password} />
 				<UserRoute path="/user/wishlist" component={WishList} />
+				<UserRoute path="/category/:slug" component={Category} />
+
 				<AdminRoute path="/admin/dashboard" component={AdminDashboard} />
 				<AdminRoute exact path="/admin/product" component={CreateProduct} />
 				<AdminRoute path="/admin/product/:slug" component={UpdateProduct} />
