@@ -34,6 +34,7 @@ import { currentUser } from "./api's/auth";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import Category from "./pages/category/Category";
+import SubCategory from "./pages/subCategory/SubCategory";
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -67,6 +68,8 @@ const App = () => {
 			<Switch>
 				<Route exact path="/" component={Home} />
 				<Route exact path="/product/:slug" component={Product} />
+				<Route path="/category/:slug" component={Category} />
+				<Route path="/sub-category/:slug" component={SubCategory} />
 				<Route path="/login" component={Login} />
 				<Route exact path="/register" component={Register} />
 				<Route path="/register/complete" component={RegisterComplete} />
@@ -74,7 +77,6 @@ const App = () => {
 				<UserRoute path="/user/history" component={History} />
 				<UserRoute path="/user/password" component={Password} />
 				<UserRoute path="/user/wishlist" component={WishList} />
-				<UserRoute path="/category/:slug" component={Category} />
 
 				<AdminRoute path="/admin/dashboard" component={AdminDashboard} />
 				<AdminRoute exact path="/admin/product" component={CreateProduct} />

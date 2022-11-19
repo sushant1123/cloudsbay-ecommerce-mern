@@ -9,7 +9,7 @@ import { getCategories } from "../../../api's/category";
 import { getSubCategory, updateSubCategory } from "../../../api's/sub-category";
 
 const UpdateSubCategory = ({ history, match }) => {
-	const [category, setCategory] = useState("");
+	const [subCategory, setSubCategory] = useState("");
 	const [allCategories, setAllCategories] = useState([]);
 	const [parentCategory, setParentCategory] = useState("");
 	const [loading, setLoading] = useState(false);
@@ -22,13 +22,13 @@ const UpdateSubCategory = ({ history, match }) => {
 		try {
 			const { data } = await updateSubCategory(
 				match.params.slug,
-				{ subCategory: category, parent: parentCategory },
+				{ subCategory: subCategory, parent: parentCategory },
 				user.token
 			);
 			setLoading(false);
 
 			toast.success(`${data.message}`);
-			setCategory("");
+			setSubCategory("");
 			setParentCategory("");
 			history.push(`/admin/sub-category`);
 		} catch (error) {
@@ -52,9 +52,9 @@ const UpdateSubCategory = ({ history, match }) => {
 		try {
 			setLoading(true);
 			const response = await getSubCategory(match.params.slug);
-			const { category } = response.data;
-			setCategory(category.name);
-			setParentCategory(category.parent);
+			const { subCategory } = response.data;
+			setSubCategory(subCategory.name);
+			setParentCategory(subCategory.parent);
 
 			setLoading(false);
 		} catch (error) {
@@ -71,7 +71,7 @@ const UpdateSubCategory = ({ history, match }) => {
 		// eslint-disable-next-line
 	}, []);
 
-	let parentCatName = allCategories.filter((cat) => cat._id === category.parent).name;
+	let parentCatName = allCategories.filter((cat) => cat._id === subCategory.parent).name;
 	console.log({ parentCatName });
 
 	return (
@@ -106,9 +106,9 @@ const UpdateSubCategory = ({ history, match }) => {
 					</div>
 
 					<CategoryForm
-						category={category}
+						category={subCategory}
 						handleCategorySubmit={handleCategorySubmit}
-						setCategory={setCategory}
+						setCategory={subCategory}
 						loading={loading}
 					/>
 				</div>

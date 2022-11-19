@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getCategory } from "../../api's/category";
+import { getSubCategory } from "../../api's/sub-category";
 import ProductCard from "../../components/cards/ProductCard";
 
-const Category = () => {
+const SubCategory = () => {
 	const params = useParams();
 	const [loading, setLoading] = useState(false);
-	const [category, setCategory] = useState({});
+	const [subCategory, setSubCategory] = useState({});
 	const [products, setProducts] = useState([]);
 
-	const getSingleCategory = async (slug) => {
+	const getSingleSubCategory = async (slug) => {
 		if (!slug) {
 			toast.error("Something went wrong");
 		}
 		try {
 			setLoading(true);
-			const { data } = await getCategory(slug);
-			setCategory(data.category);
+			const { data } = await getSubCategory(slug);
+			setSubCategory(data.subCategory);
 			setProducts(data.products);
 			setLoading(false);
 		} catch (error) {
@@ -28,7 +28,7 @@ const Category = () => {
 	};
 
 	useEffect(() => {
-		getSingleCategory(params.slug);
+		getSingleSubCategory(params.slug);
 	}, [params.slug]);
 
 	return (
@@ -41,12 +41,12 @@ const Category = () => {
 					{!loading && products.length > 0 && (
 						<h4 className="text-center p-3 mt-5 mb-5 display-4 jumbotron">
 							{products.length} {products.length > 1 ? "Products" : "Product"} in "
-							{category.name}" Category
+							{subCategory.name}" Sub Category
 						</h4>
 					)}{" "}
 					{!loading && products.length === 0 && (
 						<h4 className="text-center p-3 mt-5 mb-5 display-4 jumbotron">
-							No Products in "{category.name}" Category
+							No Products in "{subCategory.name}" Category
 						</h4>
 					)}
 				</div>
@@ -66,4 +66,4 @@ const Category = () => {
 	);
 };
 
-export default Category;
+export default SubCategory;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { getSubCategories } from "../../api's/sub-category";
 
 const SubCategoriesList = () => {
@@ -9,7 +10,6 @@ const SubCategoriesList = () => {
 		try {
 			setLoading(true);
 			const { data } = await getSubCategories();
-			console.log({ data });
 			setSubCategories(data.subCategories);
 			setLoading(false);
 		} catch (error) {
@@ -21,7 +21,7 @@ const SubCategoriesList = () => {
 	const showSubCategories = () => {
 		return subCategories.map((subcat) => (
 			<div key={subcat._id} className="col btn btn-outlined-primary btn-lg btn-block btn-raised m-3">
-				{subcat.name}
+				<Link to={`/sub-category/${subcat.slug}`}>{subcat.name}</Link>
 			</div>
 		));
 	};

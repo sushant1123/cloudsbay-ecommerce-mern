@@ -10,7 +10,6 @@ const CategoryList = () => {
 		try {
 			setLoading(true);
 			const { data } = await getCategories();
-			console.log({ data });
 			setCategories(data.categories);
 			setLoading(false);
 		} catch (error) {
