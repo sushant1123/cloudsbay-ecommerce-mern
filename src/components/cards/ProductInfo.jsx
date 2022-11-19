@@ -12,7 +12,7 @@ const ProductInfo = ({ product }) => {
 			<li className="list-group-item d-flex justify-content-between align-items-center">
 				Category{" "}
 				<Link
-					to={`category/${category?.slug}`}
+					to={`/category/${category?.slug}`}
 					className="label label-default label-pill pull-xs-right"
 				>
 					{category?.name}
@@ -25,7 +25,7 @@ const ProductInfo = ({ product }) => {
 					{subCategories?.map((subs, id) => (
 						<Link
 							key={id}
-							to={`sub-category/${subs?.slug}`}
+							to={`/sub-category/${subs?.slug}`}
 							className="label label-default label-pill pull-xs-right"
 						>
 							{subs?.name}
