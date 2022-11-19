@@ -9,10 +9,13 @@ import {
 	UserOutlined,
 	LogoutOutlined,
 	UserAddOutlined,
+	ShoppingCartOutlined,
 } from "@ant-design/icons";
 
 import { auth } from "../../firebase";
 import { logout } from "../../redux/index.actions";
+
+import Search from "../forms/Search";
 
 const Header = () => {
 	const [current, setCurrent] = useState("home");
@@ -45,6 +48,20 @@ const Header = () => {
 			icon: <AppstoreOutlined />,
 			style: styleProps,
 		},
+		{
+			label: <Link to="/shop">Shop</Link>,
+			key: "shop",
+			icon: <ShoppingCartOutlined />,
+			style: styleProps,
+		},
+
+		{
+			label: <Search />,
+			key: "search",
+			// icon: <Search />,
+			style: { marginLeft: "auto" },
+		},
+
 		user && {
 			label: user?.email ? user?.email.split("@")[0] : "Username",
 			key: "SubMenu",
