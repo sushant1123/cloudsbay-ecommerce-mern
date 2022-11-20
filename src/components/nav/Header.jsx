@@ -9,7 +9,7 @@ import {
 	UserOutlined,
 	LogoutOutlined,
 	UserAddOutlined,
-	ShoppingCartOutlined,
+	ShoppingOutlined,
 } from "@ant-design/icons";
 
 import { auth } from "../../firebase";
@@ -51,7 +51,7 @@ const Header = () => {
 		{
 			label: <Link to="/shop">Shop</Link>,
 			key: "shop",
-			icon: <ShoppingCartOutlined />,
+			icon: <ShoppingOutlined />,
 			style: styleProps,
 		},
 

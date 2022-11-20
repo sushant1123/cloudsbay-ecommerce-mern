@@ -10,5 +10,5 @@ export const reduxStore = configureStore({
 		user: userReducer,
 		search: searchReducer,
 	},
-	middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+	// middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });

@@ -43,3 +43,7 @@ export const provideAReview = async (id, rating, authtoken) => {
 export const getRelated = async (id) => {
 	return await axios.get(`${REACT_APP_API_URL}/product/related/${id}`);
 };
+
+export const fetchProductsByFilter = async (query) => {
+	return await axios.post(`${REACT_APP_API_URL}/product/search/filters`, query);
+};
