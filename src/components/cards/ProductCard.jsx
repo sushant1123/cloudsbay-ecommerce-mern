@@ -39,10 +39,15 @@ const ProductCard = ({ product, loading }) => {
 				]}
 			>
 				<Meta
-					title={`${product.title} - ₹${product.price}`}
-					description={`${product.description?.substring(0, 100)}${
-						product.description.length > 100 ? "..." : ""
-					}`}
+					title={product.title}
+					description={
+						<>
+							<div className="fs-6 fw-bolder">Price: {`₹${product.price}`}</div>
+							<div>{`${product.description?.substring(0, 100)}${
+								product.description.length > 100 ? "..." : ""
+							}`}</div>
+						</>
+					}
 					style={{ height: 120 }}
 				/>
 			</Card>
