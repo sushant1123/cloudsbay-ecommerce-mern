@@ -4,10 +4,11 @@ import { getCategories } from "../api's/category";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { Checkbox, Menu, Slider } from "antd";
-import { DollarOutlined, DownSquareOutlined } from "@ant-design/icons";
+import { DollarOutlined, DownSquareOutlined, StarOutlined } from "@ant-design/icons";
 
 import ProductCard from "../components/cards/ProductCard";
 import { searchQuery } from "../redux/index.actions";
+import Ratings from "../components/forms/Ratings";
 
 const rootSubmenuKeys = ["prange", "sub2", "sub4"];
 
@@ -28,10 +29,11 @@ const Shop = () => {
 	const [products, setProducts] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [price, setPrice] = useState([0, 0]);
+	const [star, setStar] = useState(0);
 	const [selectedCategories, setSelectedCategories] = useState(categories);
 	const [allCategories, setAllCategories] = useState([]);
 
-	const [openKeys, setOpenKeys] = useState(["prange", "category"]);
+	const [openKeys, setOpenKeys] = useState(["prange", "category", "ratings"]);
 	const onOpenChange = (keys) => {
 		const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
 		if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
@@ -59,9 +61,34 @@ const Shop = () => {
 			searchQuery({
 				categories: selectedCategories,
 				text: "",
+				rating: 0,
 				price: { start: price[0], end: price[1] },
 			})
 		);
+	};
+
+	const handleStarClick = (number) => {
+		console.log(number);
+		setStar(number);
+		setPrice([0, 0]);
+		setSelectedCategories([]);
+		searchQuery({
+			rating: number,
+		});
+	};
+
+	const getRatingsArr = () => {
+		let elem = [];
+		for (let i = 5; i > 0; i--) {
+			elem.push(
+				getItem(
+					<>
+						<Ratings starClick={handleStarClick} stars={i} />
+					</>
+				)
+			);
+		}
+		return elem;
 	};
 
 	const items = [
@@ -113,6 +140,14 @@ const Shop = () => {
 				)
 			)
 		),
+		getItem(
+			<span className="h6 d-flex align-items-center">
+				<StarOutlined /> &nbsp;&nbsp;&nbsp; Ratings
+			</span>,
+			"ratings",
+			null,
+			getRatingsArr()
+		),
 	];
 
 	//1. show products on page load
@@ -162,10 +197,9 @@ const Shop = () => {
 	};
 
 	useEffect(() => {
-		// if (!text) {
-		// 	loadAllProducts();
-		// 	return;
-		// }
+		if (!text) {
+			return;
+		}
 
 		let debounce = setTimeout(() => {
 			getAllProductsBySearch(text);
@@ -182,6 +216,7 @@ const Shop = () => {
 			setLoading(true);
 			const response = await fetchProductsByFilter({ price: { start: price[0], end: price[1] } });
 			setSelectedCategories([]);
+			setStar(0);
 			setProducts(response.data.products);
 			setLoading(false);
 		} catch (error) {
@@ -192,7 +227,9 @@ const Shop = () => {
 	};
 
 	const handleSlider = (val) => {
-		dispatch(searchQuery({ categories: [], text: "", price: { start: price[0], end: price[1] } }));
+		dispatch(
+			searchQuery({ categories: [], text: "", price: { start: price[0], end: price[1] }, rating: 0 })
+		);
 		setPrice(val);
 	};
 
@@ -216,6 +253,7 @@ const Shop = () => {
 			setLoading(true);
 			const response = await fetchProductsByFilter(categories);
 			setPrice([0, 0]);
+			setStar(0);
 			setProducts(response.data.products);
 			setLoading(false);
 		} catch (error) {
@@ -238,6 +276,36 @@ const Shop = () => {
 			clearTimeout(debounce);
 		};
 	}, [selectedCategories]);
+
+	//5. show products based on category
+	const getAllProductsByRating = async (rating) => {
+		try {
+			setLoading(true);
+			const response = await fetchProductsByFilter(rating);
+			setPrice([0, 0]);
+			setSelectedCategories([]);
+			setProducts(response.data.products);
+			setLoading(false);
+		} catch (error) {
+			setLoading(false);
+			console.log(error);
+			toast.error("Something went wrong");
+		}
+	};
+
+	useEffect(() => {
+		if (!star) {
+			return;
+		}
+		let debounce = setTimeout(() => {
+			console.log("rating changing");
+			getAllProductsByRating({ star });
+		}, 300);
+
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [star]);
 
 	return (
 		<div className="container-fluid">

@@ -12,7 +12,9 @@ const Search = () => {
 	const history = useHistory();
 
 	const handleChange = (e) => {
-		dispatch(searchQuery({ text: e.target.value }));
+		dispatch(
+			searchQuery({ text: e.target.value, categories: [], rating: 0, price: { start: 0, end: 0 } })
+		);
 	};
 
 	const handleSubmit = (e) => {
