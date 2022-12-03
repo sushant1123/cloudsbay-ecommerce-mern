@@ -15,7 +15,7 @@ const ProductCard = ({ product, loading }) => {
 			<ShowAverageRating product={product} />
 			<Card
 				hoverable
-				style={{ width: 300, marginTop: 16 }}
+				style={{ width: 340, marginTop: 16 }}
 				cover={
 					<img
 						alt={product.title}
@@ -40,9 +40,14 @@ const ProductCard = ({ product, loading }) => {
 			>
 				<Meta
 					title={product.title}
-					description={`${product.description?.substring(0, 100)}${
-						product.description.length > 100 ? "..." : ""
-					}`}
+					description={
+						<>
+							<div className="fs-6 fw-bolder">Price: {`₹${product.price}`}</div>
+							<div>{`${product.description?.substring(0, 100)}${
+								product.description.length > 100 ? "..." : ""
+							}`}</div>
+						</>
+					}
 					style={{ height: 120 }}
 				/>
 			</Card>
