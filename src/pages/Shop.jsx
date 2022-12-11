@@ -23,6 +23,10 @@ function getItem(label, key, icon, children, type) {
 	};
 }
 
+let colors = ["Black", "Brown", "Silver", "Blue", "White"];
+let brands = ["Apple", "Dell", "Samsung", "Microsoft", "Lenovo", "Asus"];
+let shipping = ["Yes", "No"];
+
 const Shop = () => {
 	let { search } = useSelector((state) => state);
 	const dispatch = useDispatch();
@@ -35,8 +39,19 @@ const Shop = () => {
 	const [allCategories, setAllCategories] = useState([]);
 	const [selectedSubCategory, setSelectedSubCategory] = useState(subCategory);
 	const [allSubCategories, setAllSubCategories] = useState([]);
+	const [selectedColor, setSelectedColor] = useState("");
+	const [selectedBrand, setSelectedBrand] = useState("");
+	const [selectedShipping, setSelectedShipping] = useState("");
 
-	const [openKeys, setOpenKeys] = useState(["prange", "category", "ratings", "subCategory"]);
+	const [openKeys, setOpenKeys] = useState([
+		"prange",
+		// "category",
+		"ratings",
+		// "subCategory",
+		"shipping",
+		"color",
+		"brand",
+	]);
 	const onOpenChange = (keys) => {
 		const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
 		if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
@@ -166,6 +181,55 @@ const Shop = () => {
 				)
 			)
 		),
+		getItem(
+			<span className="h6 d-flex align-items-center">
+				<DownSquareOutlined /> &nbsp;&nbsp;&nbsp; Shipping
+			</span>,
+			"shipping",
+			null,
+			shipping.map((shipping, id) =>
+				getItem(
+					<span
+						className=""
+						key={shipping + "-" + id}
+						onClick={(e) => setSelectedShipping(shipping)}
+					>
+						{shipping}
+					</span>,
+					id
+				)
+			)
+		),
+		getItem(
+			<span className="h6 d-flex align-items-center">
+				<DownSquareOutlined /> &nbsp;&nbsp;&nbsp; Color
+			</span>,
+			"color",
+			null,
+			colors.map((color, id) =>
+				getItem(
+					<span className="" key={color + "-" + id} onClick={(e) => setSelectedColor(color)}>
+						{color}
+					</span>,
+					id
+				)
+			)
+		),
+		getItem(
+			<span className="h6 d-flex align-items-center">
+				<DownSquareOutlined /> &nbsp;&nbsp;&nbsp; Brand
+			</span>,
+			"brand",
+			null,
+			brands.map((brand, id) =>
+				getItem(
+					<span className="" key={brand + "-" + id} onClick={(e) => setSelectedBrand(brand)}>
+						{brand}
+					</span>,
+					id
+				)
+			)
+		),
 	];
 
 	//1. show products on page load
@@ -250,6 +314,9 @@ const Shop = () => {
 			setSelectedCategories([]);
 			setSelectedSubCategory("");
 			setStar(0);
+			setSelectedBrand("");
+			setSelectedColor("");
+			setSelectedShipping("");
 			setProducts(response.data.products);
 			setLoading(false);
 		} catch (error) {
@@ -288,6 +355,9 @@ const Shop = () => {
 			setPrice([0, 0]);
 			setStar(0);
 			setSelectedSubCategory("");
+			setSelectedBrand("");
+			setSelectedColor("");
+			setSelectedShipping("");
 			setProducts(response.data.products);
 			setLoading(false);
 		} catch (error) {
@@ -319,6 +389,9 @@ const Shop = () => {
 			setPrice([0, 0]);
 			setSelectedCategories([]);
 			setSelectedSubCategory("");
+			setSelectedBrand("");
+			setSelectedColor("");
+			setSelectedShipping("");
 			setProducts(response.data.products);
 			setLoading(false);
 		} catch (error) {
@@ -349,6 +422,9 @@ const Shop = () => {
 			const response = await fetchProductsByFilter({ subCategory: selectedSubCategory });
 			setPrice([0, 0]);
 			setSelectedCategories([]);
+			setSelectedBrand("");
+			setSelectedColor("");
+			setSelectedShipping("");
 			setProducts(response.data.products);
 			setLoading(false);
 		} catch (error) {
@@ -371,6 +447,105 @@ const Shop = () => {
 			clearTimeout(debounce);
 		};
 	}, [selectedSubCategory]);
+
+	//7. show products based on brand
+	const getAllProductsByBrand = async (selectedBrand) => {
+		try {
+			setLoading(true);
+			const response = await fetchProductsByFilter({ brand: selectedBrand });
+			setPrice([0, 0]);
+			setSelectedCategories([]);
+			setSelectedBrand(selectedBrand);
+			setSelectedColor("");
+			setSelectedShipping("");
+			setProducts(response.data.products);
+			setLoading(false);
+		} catch (error) {
+			setLoading(false);
+			console.log(error);
+			toast.error("Something went wrong");
+		}
+	};
+
+	useEffect(() => {
+		if (!selectedBrand) {
+			return;
+		}
+		let debounce = setTimeout(() => {
+			console.log("brand changing");
+			getAllProductsByBrand(selectedBrand);
+		}, 300);
+
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [selectedBrand]);
+
+	//8. show products based on color
+	const getAllProductsByColor = async (selectedColor) => {
+		try {
+			setLoading(true);
+			const response = await fetchProductsByFilter({ color: selectedColor });
+			setPrice([0, 0]);
+			setSelectedCategories([]);
+			setSelectedBrand("");
+			setSelectedColor(selectedColor);
+			setSelectedShipping("");
+			setProducts(response.data.products);
+			setLoading(false);
+		} catch (error) {
+			setLoading(false);
+			console.log(error);
+			toast.error("Something went wrong");
+		}
+	};
+
+	useEffect(() => {
+		if (!selectedColor) {
+			return;
+		}
+		let debounce = setTimeout(() => {
+			console.log("color changing");
+			getAllProductsByColor(selectedColor);
+		}, 300);
+
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [selectedColor]);
+
+	//9. show products based on shipping
+	const getAllProductsByShipping = async (selectedShipping) => {
+		try {
+			setLoading(true);
+			const response = await fetchProductsByFilter({ shipping: selectedShipping });
+			setPrice([0, 0]);
+			setSelectedCategories([]);
+			setSelectedBrand("");
+			setSelectedColor("");
+			setSelectedShipping(selectedShipping);
+			setProducts(response.data.products);
+			setLoading(false);
+		} catch (error) {
+			setLoading(false);
+			console.log(error);
+			toast.error("Something went wrong");
+		}
+	};
+
+	useEffect(() => {
+		if (!selectedShipping) {
+			return;
+		}
+		let debounce = setTimeout(() => {
+			console.log("shipping changing");
+			getAllProductsByShipping(selectedShipping);
+		}, 300);
+
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [selectedShipping]);
 
 	return (
 		<div className="container-fluid">

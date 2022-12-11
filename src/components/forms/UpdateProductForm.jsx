@@ -119,10 +119,10 @@ const UpdateProductForm = ({
 					name="category"
 					id="category"
 					className="form-select"
-					value={category}
+					value={category._id}
 					onChange={onChangeCategoryHandler}
 				>
-					<option>Please Select</option>
+					<option value="">Please Select</option>
 					{categories.map((cat) => (
 						<option key={cat._id} value={cat._id}>
 							{cat.name}
@@ -140,7 +140,7 @@ const UpdateProductForm = ({
 						mode="multiple"
 						allowClear
 						id="subCategories"
-						value={subCategories}
+						value={subCategories.map((sub) => sub._id)}
 						style={{ width: "100%" }}
 						placeholder="Please Select"
 						onChange={(e) => {
