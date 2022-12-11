@@ -45,7 +45,7 @@ const UpdateProduct = ({ match, history }) => {
 				initialProductValues[i] = product.hasOwnProperty(i) ? product[i] : initialProductValues[i];
 			}
 			setProductValues((prev) => ({ ...prev, ...product }));
-			getSubCategoriesFromCategory(product.category);
+			getSubCategoriesFromCategory(product.category._id);
 		} catch (error) {
 			console.log(error);
 		}

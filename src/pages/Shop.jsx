@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getProducts, fetchProductsByFilter } from "../api's/product";
 import { getCategories } from "../api's/category";
+import { getSubCategories } from "../api's/sub-category";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { Checkbox, Menu, Slider } from "antd";
@@ -22,18 +23,35 @@ function getItem(label, key, icon, children, type) {
 	};
 }
 
+let colors = ["Black", "Brown", "Silver", "Blue", "White"];
+let brands = ["Apple", "Dell", "Samsung", "Microsoft", "Lenovo", "Asus"];
+let shipping = ["Yes", "No"];
+
 const Shop = () => {
 	let { search } = useSelector((state) => state);
 	const dispatch = useDispatch();
-	let { text, categories } = search;
+	let { text, categories, subCategory } = search;
 	const [products, setProducts] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [price, setPrice] = useState([0, 0]);
 	const [star, setStar] = useState(0);
 	const [selectedCategories, setSelectedCategories] = useState(categories);
 	const [allCategories, setAllCategories] = useState([]);
+	const [selectedSubCategory, setSelectedSubCategory] = useState(subCategory);
+	const [allSubCategories, setAllSubCategories] = useState([]);
+	const [selectedColor, setSelectedColor] = useState("");
+	const [selectedBrand, setSelectedBrand] = useState("");
+	const [selectedShipping, setSelectedShipping] = useState("");
 
-	const [openKeys, setOpenKeys] = useState(["prange", "category", "ratings"]);
+	const [openKeys, setOpenKeys] = useState([
+		"prange",
+		// "category",
+		"ratings",
+		// "subCategory",
+		"shipping",
+		"color",
+		"brand",
+	]);
 	const onOpenChange = (keys) => {
 		const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
 		if (rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
@@ -148,6 +166,70 @@ const Shop = () => {
 			null,
 			getRatingsArr()
 		),
+		getItem(
+			<span className="h6 d-flex align-items-center">
+				<DownSquareOutlined /> &nbsp;&nbsp;&nbsp; SubCategories
+			</span>,
+			"subCategory",
+			null,
+			allSubCategories.map((subCat) =>
+				getItem(
+					<span className="" key={subCat._id} onClick={(e) => setSelectedSubCategory(subCat._id)}>
+						{subCat.name}
+					</span>,
+					subCat._id
+				)
+			)
+		),
+		getItem(
+			<span className="h6 d-flex align-items-center">
+				<DownSquareOutlined /> &nbsp;&nbsp;&nbsp; Shipping
+			</span>,
+			"shipping",
+			null,
+			shipping.map((shipping, id) =>
+				getItem(
+					<span
+						className=""
+						key={shipping + "-" + id}
+						onClick={(e) => setSelectedShipping(shipping)}
+					>
+						{shipping}
+					</span>,
+					id
+				)
+			)
+		),
+		getItem(
+			<span className="h6 d-flex align-items-center">
+				<DownSquareOutlined /> &nbsp;&nbsp;&nbsp; Color
+			</span>,
+			"color",
+			null,
+			colors.map((color, id) =>
+				getItem(
+					<span className="" key={color + "-" + id} onClick={(e) => setSelectedColor(color)}>
+						{color}
+					</span>,
+					id
+				)
+			)
+		),
+		getItem(
+			<span className="h6 d-flex align-items-center">
+				<DownSquareOutlined /> &nbsp;&nbsp;&nbsp; Brand
+			</span>,
+			"brand",
+			null,
+			brands.map((brand, id) =>
+				getItem(
+					<span className="" key={brand + "-" + id} onClick={(e) => setSelectedBrand(brand)}>
+						{brand}
+					</span>,
+					id
+				)
+			)
+		),
 	];
 
 	//1. show products on page load
@@ -177,9 +259,23 @@ const Shop = () => {
 		}
 	};
 
+	const loadAllSubCategories = async () => {
+		try {
+			setLoading(true);
+			const response = await getSubCategories();
+			setAllSubCategories(response.data.subCategories);
+			setLoading(false);
+		} catch (error) {
+			setLoading(false);
+			console.log(error);
+			toast.error("Something went wrong");
+		}
+	};
+
 	useEffect(() => {
 		loadAllProducts();
 		loadAllCategories();
+		loadAllSubCategories();
 	}, []);
 
 	//2. show products on user search input
@@ -216,7 +312,11 @@ const Shop = () => {
 			setLoading(true);
 			const response = await fetchProductsByFilter({ price: { start: price[0], end: price[1] } });
 			setSelectedCategories([]);
+			setSelectedSubCategory("");
 			setStar(0);
+			setSelectedBrand("");
+			setSelectedColor("");
+			setSelectedShipping("");
 			setProducts(response.data.products);
 			setLoading(false);
 		} catch (error) {
@@ -254,6 +354,10 @@ const Shop = () => {
 			const response = await fetchProductsByFilter(categories);
 			setPrice([0, 0]);
 			setStar(0);
+			setSelectedSubCategory("");
+			setSelectedBrand("");
+			setSelectedColor("");
+			setSelectedShipping("");
 			setProducts(response.data.products);
 			setLoading(false);
 		} catch (error) {
@@ -277,13 +381,17 @@ const Shop = () => {
 		};
 	}, [selectedCategories]);
 
-	//5. show products based on category
+	//5. show products based on rating
 	const getAllProductsByRating = async (rating) => {
 		try {
 			setLoading(true);
 			const response = await fetchProductsByFilter(rating);
 			setPrice([0, 0]);
 			setSelectedCategories([]);
+			setSelectedSubCategory("");
+			setSelectedBrand("");
+			setSelectedColor("");
+			setSelectedShipping("");
 			setProducts(response.data.products);
 			setLoading(false);
 		} catch (error) {
@@ -306,6 +414,138 @@ const Shop = () => {
 			clearTimeout(debounce);
 		};
 	}, [star]);
+
+	//6. show products based on subcategory
+	const getAllProductsBySubCategory = async (selectedSubCategory) => {
+		try {
+			setLoading(true);
+			const response = await fetchProductsByFilter({ subCategory: selectedSubCategory });
+			setPrice([0, 0]);
+			setSelectedCategories([]);
+			setSelectedBrand("");
+			setSelectedColor("");
+			setSelectedShipping("");
+			setProducts(response.data.products);
+			setLoading(false);
+		} catch (error) {
+			setLoading(false);
+			console.log(error);
+			toast.error("Something went wrong");
+		}
+	};
+
+	useEffect(() => {
+		if (!selectedSubCategory) {
+			return;
+		}
+		let debounce = setTimeout(() => {
+			console.log("sub category changing");
+			getAllProductsBySubCategory(selectedSubCategory);
+		}, 300);
+
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [selectedSubCategory]);
+
+	//7. show products based on brand
+	const getAllProductsByBrand = async (selectedBrand) => {
+		try {
+			setLoading(true);
+			const response = await fetchProductsByFilter({ brand: selectedBrand });
+			setPrice([0, 0]);
+			setSelectedCategories([]);
+			setSelectedBrand(selectedBrand);
+			setSelectedColor("");
+			setSelectedShipping("");
+			setProducts(response.data.products);
+			setLoading(false);
+		} catch (error) {
+			setLoading(false);
+			console.log(error);
+			toast.error("Something went wrong");
+		}
+	};
+
+	useEffect(() => {
+		if (!selectedBrand) {
+			return;
+		}
+		let debounce = setTimeout(() => {
+			console.log("brand changing");
+			getAllProductsByBrand(selectedBrand);
+		}, 300);
+
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [selectedBrand]);
+
+	//8. show products based on color
+	const getAllProductsByColor = async (selectedColor) => {
+		try {
+			setLoading(true);
+			const response = await fetchProductsByFilter({ color: selectedColor });
+			setPrice([0, 0]);
+			setSelectedCategories([]);
+			setSelectedBrand("");
+			setSelectedColor(selectedColor);
+			setSelectedShipping("");
+			setProducts(response.data.products);
+			setLoading(false);
+		} catch (error) {
+			setLoading(false);
+			console.log(error);
+			toast.error("Something went wrong");
+		}
+	};
+
+	useEffect(() => {
+		if (!selectedColor) {
+			return;
+		}
+		let debounce = setTimeout(() => {
+			console.log("color changing");
+			getAllProductsByColor(selectedColor);
+		}, 300);
+
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [selectedColor]);
+
+	//9. show products based on shipping
+	const getAllProductsByShipping = async (selectedShipping) => {
+		try {
+			setLoading(true);
+			const response = await fetchProductsByFilter({ shipping: selectedShipping });
+			setPrice([0, 0]);
+			setSelectedCategories([]);
+			setSelectedBrand("");
+			setSelectedColor("");
+			setSelectedShipping(selectedShipping);
+			setProducts(response.data.products);
+			setLoading(false);
+		} catch (error) {
+			setLoading(false);
+			console.log(error);
+			toast.error("Something went wrong");
+		}
+	};
+
+	useEffect(() => {
+		if (!selectedShipping) {
+			return;
+		}
+		let debounce = setTimeout(() => {
+			console.log("shipping changing");
+			getAllProductsByShipping(selectedShipping);
+		}, 300);
+
+		return () => {
+			clearTimeout(debounce);
+		};
+	}, [selectedShipping]);
 
 	return (
 		<div className="container-fluid">
