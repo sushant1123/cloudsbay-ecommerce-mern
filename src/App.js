@@ -36,6 +36,7 @@ import "./App.css";
 import Category from "./pages/category/Category";
 import SubCategory from "./pages/subCategory/SubCategory";
 import Shop from "./pages/Shop";
+import Cart from "./pages/Cart";
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -76,6 +77,7 @@ const App = () => {
 				<Route exact path="/register" component={Register} />
 				<Route path="/register/complete" component={RegisterComplete} />
 				<Route path="/forgot/password" component={ForgotPassword} />
+				<Route exact path="/cart" component={Cart} />
 				<UserRoute path="/user/history" component={History} />
 				<UserRoute path="/user/password" component={Password} />
 				<UserRoute path="/user/wishlist" component={WishList} />
