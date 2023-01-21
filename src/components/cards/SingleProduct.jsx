@@ -1,28 +1,29 @@
-import React from "react";
-import { Card, Tabs } from "antd";
+import React, { useState, useEffect } from "react";
+import { Card, Tabs, Tooltip } from "antd";
+import _ from "lodash";
 import { Link, useHistory } from "react-router-dom";
 import { HeartOutlined, ShoppingCartOutlined, StarOutlined } from "@ant-design/icons";
 import { Carousel } from "react-responsive-carousel";
 import StarRatings from "react-star-ratings";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-
-// import { useEffect } from "react";
 
 import ProductInfo from "./ProductInfo";
 import RatingModal from "../modals/RatingModal";
 import DefaultImage from "../../images/default.png";
+import ShowAverageRating from "../ShowAverageRating";
 
 import { provideAReview } from "../../api's/product";
+import { addToCart } from "../../redux/index.actions";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { useEffect } from "react";
-import ShowAverageRating from "../ShowAverageRating";
 
 const SingleProduct = ({ product }) => {
 	const { title, images, description, ratings, _id, slug } = product;
-	const { user } = useSelector((state) => state);
+	const { user, cart } = useSelector((state) => state);
+
+	const [tooltip, setTooltip] = useState("Click to Add");
+	const dispatch = useDispatch();
 
 	const history = useHistory();
 
@@ -51,6 +52,23 @@ const SingleProduct = ({ product }) => {
 	const handleReview = () => {
 		if (!user) history.push({ pathname: "/login", state: { from: `/product/${slug}` } });
 		else setShow(true);
+	};
+
+	const handleAddToCart = () => {
+		let cart = [];
+		let localCart = localStorage.getItem("cart");
+		if (localCart) {
+			cart = JSON.parse(localCart);
+		}
+
+		cart.push({ ...product, count: 1 });
+		let unique = _.uniqWith(cart, _.isEqual);
+
+		// console.log({ unique });
+		localStorage.setItem("cart", JSON.stringify(unique));
+
+		dispatch(addToCart(unique));
+		setTooltip("Added");
 	};
 
 	useEffect(() => {
@@ -105,14 +123,13 @@ const SingleProduct = ({ product }) => {
 
 				<Card
 					actions={[
-						<>
-							<ShoppingCartOutlined
-								key="cart"
-								className="text-success"
-								// onClick={() => deleteProduct(product.slug)}
-							/>{" "}
-							<br /> Add to Cart
-						</>,
+						<Tooltip title={tooltip}>
+							<div onClick={handleAddToCart}>
+								<ShoppingCartOutlined key="cart" className="text-success" /> <br /> Add to
+								Cart
+							</div>
+						</Tooltip>,
+
 						//TODO add to wishlist
 						<Link to={`/`}>
 							<HeartOutlined className="text-info" key="wishlist" /> <br /> Add to Wishiist
