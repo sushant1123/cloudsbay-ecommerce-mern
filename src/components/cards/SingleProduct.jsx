@@ -20,7 +20,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const SingleProduct = ({ product }) => {
 	const { title, images, description, ratings, _id, slug } = product;
-	const { user, cart } = useSelector((state) => state);
+	const { user } = useSelector((state) => state);
 
 	const [tooltip, setTooltip] = useState("Click to Add");
 	const dispatch = useDispatch();
