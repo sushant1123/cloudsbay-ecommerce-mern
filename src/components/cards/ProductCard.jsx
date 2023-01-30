@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import _ from "lodash";
 import { useSelector, useDispatch } from "react-redux";
 
-import { addToCart } from "../../redux/index.actions";
+import { addToCart, setVisible } from "../../redux/index.actions";
 
 import { EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import DefaultImage from "../../images/default.png";
@@ -31,7 +31,10 @@ const ProductCard = ({ product, loading }) => {
 		// console.log({ unique });
 		localStorage.setItem("cart", JSON.stringify(unique));
 
+		// add to cart
 		dispatch(addToCart(unique));
+		// open drawer to show item added to cart
+		dispatch(setVisible(true));
 		setTooltip("Added");
 	};
 
