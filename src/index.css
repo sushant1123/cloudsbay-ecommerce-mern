@@ -3,3 +3,7 @@
 	height: 480px;
 	object-fit: fill;
 }
+
+.pointer {
+	cursor: pointer;
+}

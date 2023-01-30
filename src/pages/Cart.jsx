@@ -1,11 +1,10 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import ProductCartRow from "../components/ProductCartRow";
 
 const Cart = () => {
 	const { user, cart } = useSelector((state) => state);
-	const dispatch = useDispatch();
 
 	const getCurrencyFormatter = (arr = []) => {
 		let total = 0;
@@ -17,6 +16,7 @@ const Cart = () => {
 	};
 
 	const saveOrderToDB = () => {};
+
 	const showCartItems = () => {
 		return (
 			<table className="table align-middle mb-0">
@@ -43,7 +43,7 @@ const Cart = () => {
 	return (
 		<div className="container-fluid">
 			<div className="row mt-2">
-				<div className="col-md-8">
+				<div className="col-md-9">
 					<h4>
 						Cart / {cart.length} {cart.length > 1 ? "products" : "product"}
 					</h4>
@@ -56,7 +56,7 @@ const Cart = () => {
 					)}
 				</div>
 
-				<div className="col-md-4">
+				<div className="col-md-3">
 					<h4>Order Summary</h4>
 					<hr />
 

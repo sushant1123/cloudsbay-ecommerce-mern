@@ -9,6 +9,7 @@ import FileUpload from "../../../components/forms/FileUpload";
 import { getProduct, updateProduct } from "../../../api's/product";
 import { getCategories, getSubCategory } from "../../../api's/category";
 import UpdateProductForm from "../../../components/forms/UpdateProductForm";
+import { colors } from "../../../utils/utils";
 
 const initialProductValues = {
 	title: "",
@@ -22,7 +23,7 @@ const initialProductValues = {
 	color: "",
 	brand: "",
 	images: [],
-	colors: ["Black", "Brown", "Silver", "Blue", "White"],
+	colors: colors,
 	brands: ["Apple", "Dell", "Samsung", "Microsoft", "Lenovo", "Asus"],
 };
 

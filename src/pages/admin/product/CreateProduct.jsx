@@ -10,6 +10,7 @@ import FileUpload from "../../../components/forms/FileUpload";
 
 import { createProduct } from "../../../api's/product";
 import { getCategories, getSubCategory } from "../../../api's/category";
+import { colors } from "../../../utils/utils";
 
 const initialProductValues = {
 	title: "M1 Pro MacBook Pro",
@@ -23,7 +24,7 @@ const initialProductValues = {
 	color: "Black",
 	brand: "Apple",
 	images: [],
-	colors: ["Black", "Brown", "Silver", "Blue", "White"],
+	colors: colors,
 	brands: ["Apple", "Dell", "Samsung", "Microsoft", "Lenovo", "Asus"],
 };
 
