@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, Tooltip } from "antd";
 import { Link } from "react-router-dom";
 import _ from "lodash";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { addToCart, setVisible } from "../../redux/index.actions";
 
