@@ -211,7 +211,7 @@ const Shop = () => {
 					<span className="" key={color + "-" + id} onClick={(e) => setSelectedColor(color)}>
 						{color}
 					</span>,
-					id
+					color + "-" + id
 				)
 			)
 		),
@@ -226,7 +226,7 @@ const Shop = () => {
 					<span className="" key={brand + "-" + id} onClick={(e) => setSelectedBrand(brand)}>
 						{brand}
 					</span>,
-					id
+					brand + "-" + id
 				)
 			)
 		),

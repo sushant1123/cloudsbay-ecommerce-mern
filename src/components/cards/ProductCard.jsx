@@ -1,6 +1,10 @@
-import React from "react";
-import { Card } from "antd";
+import React, { useState } from "react";
+import { Card, Tooltip } from "antd";
 import { Link } from "react-router-dom";
+import _ from "lodash";
+import { useSelector, useDispatch } from "react-redux";
+
+import { addToCart, setVisible } from "../../redux/index.actions";
 
 import { EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import DefaultImage from "../../images/default.png";
@@ -10,6 +14,30 @@ import ShowAverageRating from "../ShowAverageRating";
 const { Meta } = Card;
 
 const ProductCard = ({ product, loading }) => {
+	const [tooltip, setTooltip] = useState("Click to Add");
+	// const { user, cart } = useSelector((state) => state);
+	const dispatch = useDispatch();
+
+	const handleAddToCart = () => {
+		let cart = [];
+		let localCart = localStorage.getItem("cart");
+		if (localCart) {
+			cart = JSON.parse(localCart);
+		}
+
+		cart.push({ ...product, count: 1 });
+		let unique = _.uniqWith(cart, _.isEqual);
+
+		// console.log({ unique });
+		localStorage.setItem("cart", JSON.stringify(unique));
+
+		// add to cart
+		dispatch(addToCart(unique));
+		// open drawer to show item added to cart
+		dispatch(setVisible(true));
+		setTooltip("Added");
+	};
+
 	return (
 		<>
 			<ShowAverageRating product={product} />
@@ -28,14 +56,16 @@ const ProductCard = ({ product, loading }) => {
 					<Link to={`/product/${product.slug}`}>
 						<EyeOutlined key="edit" className="text-warning" /> <br /> View Product
 					</Link>,
-					<>
-						<ShoppingCartOutlined
-							key="delete"
-							className="text-danger"
-							// onClick={() => deleteProduct(product.slug)}
-						/>{" "}
-						<br /> Add to Cart
-					</>,
+					<Tooltip title={tooltip}>
+						<div onClick={handleAddToCart}>
+							<ShoppingCartOutlined
+								key="delete"
+								className="text-danger"
+								// onClick={() => deleteProduct(product.slug)}
+							/>{" "}
+							<br /> Add to Cart
+						</div>
+					</Tooltip>,
 				]}
 			>
 				<Meta

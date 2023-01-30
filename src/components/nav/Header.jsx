@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Menu } from "antd";
+import { Badge, Menu } from "antd";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "firebase/auth";
@@ -10,6 +10,7 @@ import {
 	LogoutOutlined,
 	UserAddOutlined,
 	ShoppingOutlined,
+	ShoppingCartOutlined,
 } from "@ant-design/icons";
 
 import { auth } from "../../firebase";
@@ -23,7 +24,7 @@ const Header = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
 
-	const { user } = useSelector((state) => state);
+	const { user, cart } = useSelector((state) => state);
 
 	const logOut = async () => {
 		try {
@@ -52,6 +53,18 @@ const Header = () => {
 			label: <Link to="/shop">Shop</Link>,
 			key: "shop",
 			icon: <ShoppingOutlined />,
+			style: styleProps,
+		},
+		{
+			label: (
+				<Link to="/cart">
+					<Badge count={cart.length} offset={[9, 0]}>
+						Cart
+					</Badge>
+				</Link>
+			),
+			key: "cart",
+			icon: <ShoppingCartOutlined />,
 			style: styleProps,
 		},
 

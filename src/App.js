@@ -26,16 +26,19 @@ import UpdateProduct from "./pages/admin/product/UpdateProduct";
 
 import UserRoute from "./components/routes/UserRoute";
 import AdminRoute from "./components/routes/AdminRoute";
+import SideDrawer from "./components/drawer/SideDrawer";
 
 import { auth } from "./firebase";
 import { loggedInUser } from "./redux/index.actions";
 import { currentUser } from "./api's/auth";
 
-import "react-toastify/dist/ReactToastify.css";
-import "./App.css";
 import Category from "./pages/category/Category";
 import SubCategory from "./pages/subCategory/SubCategory";
 import Shop from "./pages/Shop";
+import Cart from "./pages/Cart";
+
+import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -66,6 +69,7 @@ const App = () => {
 	return (
 		<div>
 			<Header />
+			<SideDrawer></SideDrawer>
 			<Switch>
 				<Route exact path="/" component={Home} />
 				<Route exact path="/product/:slug" component={Product} />
@@ -76,6 +80,7 @@ const App = () => {
 				<Route exact path="/register" component={Register} />
 				<Route path="/register/complete" component={RegisterComplete} />
 				<Route path="/forgot/password" component={ForgotPassword} />
+				<Route exact path="/cart" component={Cart} />
 				<UserRoute path="/user/history" component={History} />
 				<UserRoute path="/user/password" component={Password} />
 				<UserRoute path="/user/wishlist" component={WishList} />
