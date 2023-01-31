@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import ProductCartRow from "../components/ProductCartRow";
 
-const Cart = () => {
+const Cart = ({ history }) => {
 	const { user, cart } = useSelector((state) => state);
 
 	const getCurrencyFormatter = (arr = []) => {
@@ -15,7 +15,10 @@ const Cart = () => {
 		return new Intl.NumberFormat("en-IN").format(total);
 	};
 
-	const saveOrderToDB = () => {};
+	const saveOrderToDB = () => {
+		console.log("cart", JSON.stringify(cart, null, 4));
+		history.push("/checkout");
+	};
 
 	const showCartItems = () => {
 		return (
