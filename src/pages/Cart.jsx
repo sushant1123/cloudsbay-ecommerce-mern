@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { userCart } from "../api's/user";
 import ProductCartRow from "../components/ProductCartRow";
 
 const Cart = ({ history }) => {
@@ -15,9 +16,16 @@ const Cart = ({ history }) => {
 		return new Intl.NumberFormat("en-IN").format(total);
 	};
 
-	const saveOrderToDB = () => {
+	const saveOrderToDB = async () => {
 		console.log("cart", JSON.stringify(cart, null, 4));
-		history.push("/checkout");
+		try {
+			const response = await userCart(cart, user.token);
+			if (response.data.ok) {
+				history.push("/checkout");
+			}
+		} catch (error) {
+			console.log("cart save error", error);
+		}
 	};
 
 	const showCartItems = () => {
