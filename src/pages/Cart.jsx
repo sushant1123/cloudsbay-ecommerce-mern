@@ -17,10 +17,10 @@ const Cart = ({ history }) => {
 	};
 
 	const saveOrderToDB = async () => {
-		console.log("cart", JSON.stringify(cart, null, 4));
 		try {
 			const response = await userCart(cart, user.token);
 			if (response.data.ok) {
+				console.log("cart saved to db");
 				history.push("/checkout");
 			}
 		} catch (error) {
