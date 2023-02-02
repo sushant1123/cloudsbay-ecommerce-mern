@@ -36,6 +36,7 @@ import Category from "./pages/category/Category";
 import SubCategory from "./pages/subCategory/SubCategory";
 import Shop from "./pages/Shop";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
@@ -84,6 +85,7 @@ const App = () => {
 				<UserRoute path="/user/history" component={History} />
 				<UserRoute path="/user/password" component={Password} />
 				<UserRoute path="/user/wishlist" component={WishList} />
+				<UserRoute path="/checkout" component={Checkout} />
 
 				<AdminRoute path="/admin/dashboard" component={AdminDashboard} />
 				<AdminRoute exact path="/admin/product" component={CreateProduct} />

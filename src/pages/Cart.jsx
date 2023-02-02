@@ -1,9 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { userCart } from "../api's/user";
 import ProductCartRow from "../components/ProductCartRow";
 
-const Cart = () => {
+const Cart = ({ history }) => {
 	const { user, cart } = useSelector((state) => state);
 
 	const getCurrencyFormatter = (arr = []) => {
@@ -15,7 +16,17 @@ const Cart = () => {
 		return new Intl.NumberFormat("en-IN").format(total);
 	};
 
-	const saveOrderToDB = () => {};
+	const saveOrderToDB = async () => {
+		try {
+			const response = await userCart(cart, user.token);
+			if (response.data.ok) {
+				console.log("cart saved to db");
+				history.push("/checkout");
+			}
+		} catch (error) {
+			console.log("cart save error", error);
+		}
+	};
 
 	const showCartItems = () => {
 		return (
