@@ -2,14 +2,18 @@ import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { getUserCart, clearUserCart, saveUserAddress } from "../api's/user";
+import { getUserCart, clearUserCart, saveUserAddress, applyCoupon } from "../api's/user";
 import { addToCart } from "../redux/reducers-or-slices/cartSlice";
 import "react-quill/dist/quill.snow.css";
+import { isCouponApplied } from "../redux/index.actions";
 
-const Checkout = () => {
+const Checkout = ({ history }) => {
 	const [products, setProducts] = useState([]);
 	const [total, setTotal] = useState(0);
+	const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
+	const [applyCouponError, setApplyCouponError] = useState("");
 	const [address, setAddress] = useState("");
+	const [coupon, setCoupon] = useState("");
 	const [isAddressSaved, setIsAddressSaved] = useState(false);
 
 	const { user } = useSelector((state) => state);
@@ -31,15 +35,16 @@ const Checkout = () => {
 
 	const placeOrder = async () => {
 		console.log("order placed");
+		history.push("/payment");
 	};
 
 	const getCartDetails = async () => {
 		try {
 			const response = await getUserCart(user.token);
-			let { products, cartTotal } = response.data;
+			let { products, cartTotal, totalAfterDiscount } = response.data;
 			setProducts(products);
 			setTotal(cartTotal);
-			// console.log(JSON.stringify(response.data, null, 4));
+			setTotalAfterDiscount(totalAfterDiscount);
 		} catch (error) {
 			console.log(error);
 			toast.error(`${error.response.data.message}`);
@@ -62,6 +67,8 @@ const Checkout = () => {
 			await clearUserCart(user.token);
 			setProducts([]);
 			setTotal(0);
+			setTotalAfterDiscount(0);
+			setCoupon("");
 			toast.success("You have emptied your cart. Continue Shopping..");
 		} catch (error) {
 			console.log(error);
@@ -69,34 +76,37 @@ const Checkout = () => {
 		}
 	};
 
-	useEffect(() => {
-		getCartDetails();
-		// eslint-disable-next-line
-	}, []);
+	const applyDiscountCoupon = async () => {
+		console.log("applied coupon, send to backend", coupon);
+		try {
+			const response = await applyCoupon(user.token, coupon);
+			setTotalAfterDiscount(response.data.cartTotalAfterDiscount);
+			dispatch(isCouponApplied(true));
+			toast.success("Coupon applied successfully");
+			setApplyCouponError("");
+		} catch (error) {
+			console.log(error);
+			dispatch(isCouponApplied(false));
+			setApplyCouponError(error.response.data.message);
+		}
+	};
 
-	return (
-		<div className="row">
-			<div className="col-md-6">
-				<h4>Delivery Address</h4>
-				<br />
-				{/* <br /> */}
-				{/* <textarea cols={100} rows={5} /> */}
+	const showAddress = () => {
+		return (
+			<>
 				<ReactQuill theme="snow" value={address} onChange={setAddress} />
 				<button className="btn btn-primary mt-2" onClick={saveAddressToDB}>
 					Save
 				</button>
-				<hr />
-				<h4>Got Coupon?</h4>
-				coupon input and apply button
-			</div>
+			</>
+		);
+	};
 
-			<div className="col-md-6">
-				<h4>Order Summary</h4>
-				<hr />
-
+	const ShowProductSummary = () => {
+		return (
+			<>
 				<p>Products {products.length}</p>
 				<hr />
-
 				{products.map((p, i) => (
 					<div key={i}>
 						<p>
@@ -105,10 +115,76 @@ const Checkout = () => {
 						</p>
 					</div>
 				))}
+			</>
+		);
+	};
+
+	const showApplyCoupon = () => {
+		return (
+			<>
+				<div className="form-group d-flex">
+					<input
+						type="text"
+						className="form-control w-50"
+						placeholder=""
+						value={coupon}
+						onChange={(e) => {
+							setApplyCouponError("");
+							setCoupon(e.target.value);
+						}}
+					/>
+
+					<span className="text-danger fs-6 p-1 ms-2 w-100">{applyCouponError}</span>
+				</div>
+				<br />
+
+				<button
+					disabled={!coupon || !products.length}
+					onClick={applyDiscountCoupon}
+					className="btn btn-primary"
+				>
+					Apply
+				</button>
+			</>
+		);
+	};
+
+	useEffect(() => {
+		getCartDetails();
+		// eslint-disable-next-line
+	}, []);
+
+	return (
+		<div className="row p-2">
+			<div className="col-md-6">
+				<h4>Delivery Address</h4>
+				<hr />
+
+				{showAddress()}
+				<hr />
+
+				<h4>Got Coupon?</h4>
+				{showApplyCoupon()}
+			</div>
+
+			<div className="col-md-6">
+				<h4>Order Summary</h4>
+				<hr />
+
+				<ShowProductSummary />
 				<hr />
 
 				<p>Cart Total: ₹ {getCurrencyFormatter(total)}</p>
 				<hr />
+
+				{totalAfterDiscount ? (
+					<>
+						<p className="bg-success text-white p-1">
+							Discount Applied: Total Payable: ₹ {getCurrencyFormatter(totalAfterDiscount)}
+						</p>
+						<hr />
+					</>
+				) : null}
 
 				<div className="row">
 					<div className="col-md-6">

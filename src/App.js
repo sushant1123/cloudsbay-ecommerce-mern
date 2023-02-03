@@ -40,6 +40,7 @@ import Checkout from "./pages/Checkout";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
+import Payment from "./pages/Payment";
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -86,6 +87,7 @@ const App = () => {
 				<UserRoute path="/user/password" component={Password} />
 				<UserRoute path="/user/wishlist" component={WishList} />
 				<UserRoute path="/checkout" component={Checkout} />
+				<UserRoute path="/payment" component={Payment} />
 
 				<AdminRoute path="/admin/dashboard" component={AdminDashboard} />
 				<AdminRoute exact path="/admin/product" component={CreateProduct} />
