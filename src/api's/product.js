@@ -4,7 +4,7 @@ import { getURL } from "./config";
 const REACT_APP_API_URL = getURL();
 
 export const createProduct = async (product, authtoken) => {
-	console.log(product);
+	// console.log(product);
 	return await axios.post(`${REACT_APP_API_URL}/product`, { ...product }, { headers: { authtoken } });
 };
 
@@ -17,17 +17,17 @@ export const getProduct = async (slug) => {
 };
 
 export const deleteProduct = async (slug, authtoken) => {
-	console.log({ slug });
+	// console.log({ slug });
 	return await axios.delete(`${REACT_APP_API_URL}/product/${slug}`, { headers: { authtoken } });
 };
 
 export const updateProduct = async (slug, product, authtoken) => {
-	console.log({ slug });
+	// console.log({ slug });
 	return await axios.put(`${REACT_APP_API_URL}/product/${slug}`, product, { headers: { authtoken } });
 };
 
 export const getEnhancedProductList = async (sort, order, page) => {
-	console.log({ sort, order, page });
+	// console.log({ sort, order, page });
 	return await axios.post(`${REACT_APP_API_URL}/products`, { sort, order, page });
 };
 
@@ -36,7 +36,7 @@ export const getProductsCount = async () => {
 };
 
 export const provideAReview = async (id, rating, authtoken) => {
-	console.log({ id, rating, authtoken });
+	// console.log({ id, rating, authtoken });
 	return await axios.put(`${REACT_APP_API_URL}/product/rating/${id}`, rating, { headers: { authtoken } });
 };
 

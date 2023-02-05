@@ -34,7 +34,6 @@ const Checkout = ({ history }) => {
 	};
 
 	const placeOrder = async () => {
-		console.log("order placed");
 		history.push("/payment");
 	};
 
