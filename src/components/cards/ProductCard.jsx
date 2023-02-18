@@ -57,13 +57,14 @@ const ProductCard = ({ product, loading }) => {
 						<EyeOutlined key="edit" className="text-warning" /> <br /> View Product
 					</Link>,
 					<Tooltip title={tooltip}>
-						<div onClick={handleAddToCart}>
+						<div onClick={handleAddToCart} disabled={product.quantity < 1}>
 							<ShoppingCartOutlined
 								key="delete"
 								className="text-danger"
 								// onClick={() => deleteProduct(product.slug)}
 							/>{" "}
-							<br /> Add to Cart
+							<br />
+							{product.quantity < 1 ? "Out of Stock" : "Add to Cart"}
 						</div>
 					</Tooltip>,
 				]}

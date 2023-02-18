@@ -5,6 +5,8 @@ import { createPaymentIntent } from "../../api's/stripe";
 import { Card } from "antd";
 import { DollarOutlined, CheckOutlined } from "@ant-design/icons";
 import DefaultImage from "../../images/default.png";
+import { clearUserCart, createOrder } from "../../api's/user";
+import { addToCart, isCouponApplied } from "../../redux/index.actions";
 
 import "../../stripe.css";
 import { Link } from "react-router-dom";
@@ -28,7 +30,6 @@ const cardStyle = {
 };
 
 const StripeCheckout = ({ history }) => {
-	//eslint-disable-next-line
 	const dispatch = useDispatch();
 	const { user, coupon } = useSelector((state) => state);
 
@@ -80,7 +81,20 @@ const StripeCheckout = ({ history }) => {
 			if (confirmPaymentRes.error) {
 				setError(`Payment failed with ${confirmPaymentRes.error.message}`);
 			} else {
-				// console.log(JSON.stringify(confirmPaymentRes, null, 4));
+				const createOrderResp = await createOrder(user.token, confirmPaymentRes);
+				if (createOrderResp.data.ok) {
+					//empty cart from localstorage
+					localStorage.removeItem("cart");
+
+					//empty cart from redux
+					dispatch(addToCart([]));
+
+					//reset coupon to false
+					dispatch(isCouponApplied(false));
+					//empty cart from db
+
+					await clearUserCart(user.token);
+				}
 				setError("");
 				setSucceeded(true);
 				setError("");
