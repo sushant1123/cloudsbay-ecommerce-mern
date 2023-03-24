@@ -4,7 +4,10 @@ import { getUserOrders } from "../../api's/user";
 import { useSelector, useDispatch } from "react-redux";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+
 import ShowPaymentInfo from "../../components/cards/ShowPaymentInfo";
+import Invoice from "../../components/orders/Invoice";
 
 const History = () => {
 	const [loading, setLoading] = useState(false);
@@ -64,15 +67,25 @@ const History = () => {
 		);
 	};
 
+	const showPDFDownloadLink = (order) => {
+		return (
+			<PDFDownloadLink
+				document={<Invoice order={order} />}
+				className="btn btn-sm btn-block btn-outline-primary"
+				fileName="invoice.pdf"
+			>
+				PDF Download
+			</PDFDownloadLink>
+		);
+	};
+
 	const showAllOrders = () => {
 		return orders.map((order, i) => (
 			<div key={i} className="m-5 p-3 card">
 				<ShowPaymentInfo order={order} />
 				{showOrderInTable(order)}
 				<div className="row">
-					<div className="col">
-						<p>PDF Download</p>
-					</div>
+					<div className="col">{showPDFDownloadLink(order)}</div>
 				</div>
 			</div>
 		));
