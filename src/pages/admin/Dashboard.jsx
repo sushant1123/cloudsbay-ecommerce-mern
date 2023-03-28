@@ -25,10 +25,14 @@ const Dashboard = () => {
 	const changeOrderStatusHandler = async (orderId, status) => {
 		try {
 			setLoading(true);
-			const { data } = await updateStatus(orderId, status, user.token);
+			const response = await updateStatus(orderId, status, user.token);
+			if (response.status === 200) {
+				toast.success("order updated successfully");
+				loadAllOrders();
+			} else {
+				toast.error("order updation failed");
+			}
 			setLoading(false);
-			toast.success("order updated successfully");
-			loadAllOrders();
 		} catch (error) {
 			console.log(error);
 			toast.error(error.response.data.message);
