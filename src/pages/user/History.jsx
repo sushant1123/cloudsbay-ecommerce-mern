@@ -8,6 +8,7 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 
 import ShowPaymentInfo from "../../components/cards/ShowPaymentInfo";
 import Invoice from "../../components/orders/Invoice";
+import ProductsTable from "../../components/orders/ProductsTable";
 
 const History = () => {
 	const [loading, setLoading] = useState(false);
@@ -31,7 +32,7 @@ const History = () => {
 	const showOrderInTable = (order) => {
 		return (
 			<table className="table table-bordered">
-				<thead className="thead-light">
+				<thead className="bg-light">
 					<tr>
 						<th scope="col">Title</th>
 						<th scope="col">Price</th>
@@ -83,7 +84,8 @@ const History = () => {
 		return orders.map((order, i) => (
 			<div key={i} className="m-5 p-3 card">
 				<ShowPaymentInfo order={order} />
-				{showOrderInTable(order)}
+				{/* {showOrderInTable(order)} */}
+				<ProductsTable order={order} />
 				<div className="row">
 					<div className="col">{showPDFDownloadLink(order)}</div>
 				</div>

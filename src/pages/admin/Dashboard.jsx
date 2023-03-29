@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { getAllOrders, updateStatus } from "../../api's/admin";
 import AdminNav from "../../components/nav/AdminNav";
+import Orders from "../../components/orders/Orders";
 
 const Dashboard = () => {
 	const { user } = useSelector((state) => state);
@@ -53,6 +54,7 @@ const Dashboard = () => {
 
 				<div className="col-md-10">
 					<h2>Admin Dashboard</h2>
+					<Orders orders={orders} handleStatusChange={changeOrderStatusHandler} />
 				</div>
 			</div>
 		</div>
