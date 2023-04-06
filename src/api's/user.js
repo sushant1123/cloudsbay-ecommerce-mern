@@ -67,6 +67,18 @@ export const createOrder = async (authtoken, stripeResponse) => {
 	);
 };
 
+export const createCODOrder = async (authtoken, isCOD) => {
+	return await axios.post(
+		`${REACT_APP_API_URL}/user/cod-order`,
+		{ isCOD },
+		{
+			headers: {
+				authtoken,
+			},
+		}
+	);
+};
+
 export const getUserOrders = async (authtoken) => {
 	return await axios.get(`${REACT_APP_API_URL}/user/orders`, {
 		headers: {

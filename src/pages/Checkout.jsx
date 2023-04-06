@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { getUserCart, clearUserCart, saveUserAddress, applyCoupon } from "../api's/user";
+import { getUserCart, clearUserCart, saveUserAddress, applyCoupon, createCODOrder } from "../api's/user";
 import { addToCart } from "../redux/reducers-or-slices/cartSlice";
 import "react-quill/dist/quill.snow.css";
 import { isCouponApplied } from "../redux/index.actions";
@@ -16,7 +16,7 @@ const Checkout = ({ history }) => {
 	const [coupon, setCoupon] = useState("");
 	const [isAddressSaved, setIsAddressSaved] = useState(false);
 
-	const { user } = useSelector((state) => state);
+	const { user, isCOD } = useSelector((state) => state);
 	const dispatch = useDispatch();
 
 	const saveAddressToDB = async () => {
@@ -35,6 +35,21 @@ const Checkout = ({ history }) => {
 
 	const placeOrder = async () => {
 		history.push("/payment");
+	};
+
+	const placeCODOrder = async () => {
+		// history.push("/payment");
+		try {
+			const response = await createCODOrder(user.token, isCOD);
+			console.log("COD order placed", response);
+
+			//empty cart from redux, localstorage, storage,
+			//reset coupon, reset COD
+			//redirect user to history page
+		} catch (error) {
+			console.log(error);
+			toast.error(`${error.response.data.message}`);
+		}
 	};
 
 	const getCartDetails = async () => {
@@ -187,13 +202,23 @@ const Checkout = ({ history }) => {
 
 				<div className="row">
 					<div className="col-md-6">
-						<button
-							className="btn btn-primary"
-							disabled={!products.length || !isAddressSaved}
-							onClick={placeOrder}
-						>
-							Place Order
-						</button>
+						{isCOD ? (
+							<button
+								className="btn btn-primary"
+								disabled={!products.length || !isAddressSaved}
+								onClick={placeCODOrder}
+							>
+								Place COD Order
+							</button>
+						) : (
+							<button
+								className="btn btn-primary"
+								disabled={!products.length || !isAddressSaved}
+								onClick={placeOrder}
+							>
+								Place Order
+							</button>
+						)}
 					</div>
 
 					<div className="col-md-6">

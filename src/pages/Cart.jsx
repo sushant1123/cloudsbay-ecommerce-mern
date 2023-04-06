@@ -1,11 +1,13 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { userCart } from "../api's/user";
 import ProductCartRow from "../components/ProductCartRow";
+import { setIsCOD } from "../redux/index.actions";
 
 const Cart = ({ history }) => {
 	const { user, cart } = useSelector((state) => state);
+	const dispatch = useDispatch();
 
 	const getCurrencyFormatter = (arr = []) => {
 		let total = 0;
@@ -20,6 +22,19 @@ const Cart = ({ history }) => {
 		try {
 			const response = await userCart(cart, user.token);
 			if (response.data.ok) {
+				console.log("cart saved to db");
+				history.push("/checkout");
+			}
+		} catch (error) {
+			console.log("cart save error", error);
+		}
+	};
+
+	const saveCODOrderToDB = async () => {
+		try {
+			const response = await userCart(cart, user.token);
+			if (response.data.ok) {
+				dispatch(setIsCOD(true));
 				console.log("cart saved to db");
 				history.push("/checkout");
 			}
@@ -85,13 +100,23 @@ const Cart = ({ history }) => {
 					<hr />
 
 					{user ? (
-						<button
-							className="btn btn-sm btn-primary mt-2"
-							onClick={saveOrderToDB}
-							disabled={!cart.length}
-						>
-							Proceed to Checkout
-						</button>
+						<>
+							<button
+								className="btn btn-sm btn-primary mt-2"
+								onClick={saveOrderToDB}
+								disabled={!cart.length}
+							>
+								Proceed to Checkout
+							</button>
+							<br />
+							<button
+								className="btn btn-sm btn-warning mt-2"
+								onClick={saveCODOrderToDB}
+								disabled={!cart.length}
+							>
+								Pay Cash on Delivery
+							</button>
+						</>
 					) : (
 						<button type="button" className="btn btn-link" data-mdb-ripple-color="dark">
 							<Link
