@@ -67,10 +67,10 @@ export const createOrder = async (authtoken, stripeResponse) => {
 	);
 };
 
-export const createCODOrder = async (authtoken, isCOD) => {
+export const createCODOrder = async (authtoken, isCOD, coupon) => {
 	return await axios.post(
 		`${REACT_APP_API_URL}/user/cod-order`,
-		{ isCOD },
+		{ isCOD, coupon },
 		{
 			headers: {
 				authtoken,

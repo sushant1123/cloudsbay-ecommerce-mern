@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { getUserCart, clearUserCart, saveUserAddress, applyCoupon, createCODOrder } from "../api's/user";
 import { addToCart } from "../redux/reducers-or-slices/cartSlice";
 import "react-quill/dist/quill.snow.css";
-import { isCouponApplied } from "../redux/index.actions";
+import { isCouponApplied, setIsCOD } from "../redux/index.actions";
 
 const Checkout = ({ history }) => {
 	const [products, setProducts] = useState([]);
@@ -40,12 +40,29 @@ const Checkout = ({ history }) => {
 	const placeCODOrder = async () => {
 		// history.push("/payment");
 		try {
-			const response = await createCODOrder(user.token, isCOD);
+			const response = await createCODOrder(user.token, isCOD, coupon);
 			console.log("COD order placed", response);
+			if (response.data.ok) {
+				//empty cart from redux, localstorage, storage,
 
-			//empty cart from redux, localstorage, storage,
-			//reset coupon, reset COD
-			//redirect user to history page
+				//empty localstorage
+				localStorage.removeItem("cart");
+
+				//empty redux
+				dispatch(addToCart([]));
+
+				//empty cart
+				await clearUserCart(user.token);
+
+				//reset coupon, reset COD
+				dispatch(isCouponApplied(false));
+				dispatch(setIsCOD(false));
+
+				//redirect user to history page
+				setTimeout(() => {
+					history.push("/user/history");
+				}, 1500);
+			}
 		} catch (error) {
 			console.log(error);
 			toast.error(`${error.response.data.message}`);
@@ -101,6 +118,7 @@ const Checkout = ({ history }) => {
 		} catch (error) {
 			console.log(error);
 			dispatch(isCouponApplied(false));
+			setCoupon("");
 			setApplyCouponError(error.response.data.message);
 		}
 	};
