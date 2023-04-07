@@ -3,3 +3,4 @@ export * from "./reducers-or-slices/searchSlice";
 export * from "./reducers-or-slices/cartSlice";
 export * from "./reducers-or-slices/drawerSlice";
 export * from "./reducers-or-slices/couponSlice";
+export * from "./reducers-or-slices/codReducer";

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { getUserCart, clearUserCart, saveUserAddress, applyCoupon } from "../api's/user";
+import { getUserCart, clearUserCart, saveUserAddress, applyCoupon, createCODOrder } from "../api's/user";
 import { addToCart } from "../redux/reducers-or-slices/cartSlice";
 import "react-quill/dist/quill.snow.css";
-import { isCouponApplied } from "../redux/index.actions";
+import { isCouponApplied, setIsCOD } from "../redux/index.actions";
 
 const Checkout = ({ history }) => {
 	const [products, setProducts] = useState([]);
@@ -16,7 +16,7 @@ const Checkout = ({ history }) => {
 	const [coupon, setCoupon] = useState("");
 	const [isAddressSaved, setIsAddressSaved] = useState(false);
 
-	const { user } = useSelector((state) => state);
+	const { user, isCOD } = useSelector((state) => state);
 	const dispatch = useDispatch();
 
 	const saveAddressToDB = async () => {
@@ -35,6 +35,38 @@ const Checkout = ({ history }) => {
 
 	const placeOrder = async () => {
 		history.push("/payment");
+	};
+
+	const placeCODOrder = async () => {
+		// history.push("/payment");
+		try {
+			const response = await createCODOrder(user.token, isCOD, coupon);
+			console.log("COD order placed", response);
+			if (response.data.ok) {
+				//empty cart from redux, localstorage, storage,
+
+				//empty localstorage
+				localStorage.removeItem("cart");
+
+				//empty redux
+				dispatch(addToCart([]));
+
+				//empty cart
+				await clearUserCart(user.token);
+
+				//reset coupon, reset COD
+				dispatch(isCouponApplied(false));
+				dispatch(setIsCOD(false));
+
+				//redirect user to history page
+				setTimeout(() => {
+					history.push("/user/history");
+				}, 1500);
+			}
+		} catch (error) {
+			console.log(error);
+			toast.error(`${error.response.data.message}`);
+		}
 	};
 
 	const getCartDetails = async () => {
@@ -86,6 +118,7 @@ const Checkout = ({ history }) => {
 		} catch (error) {
 			console.log(error);
 			dispatch(isCouponApplied(false));
+			setCoupon("");
 			setApplyCouponError(error.response.data.message);
 		}
 	};
@@ -187,13 +220,23 @@ const Checkout = ({ history }) => {
 
 				<div className="row">
 					<div className="col-md-6">
-						<button
-							className="btn btn-primary"
-							disabled={!products.length || !isAddressSaved}
-							onClick={placeOrder}
-						>
-							Place Order
-						</button>
+						{isCOD ? (
+							<button
+								className="btn btn-primary"
+								disabled={!products.length || !isAddressSaved}
+								onClick={placeCODOrder}
+							>
+								Place COD Order
+							</button>
+						) : (
+							<button
+								className="btn btn-primary"
+								disabled={!products.length || !isAddressSaved}
+								onClick={placeOrder}
+							>
+								Place Order
+							</button>
+						)}
 					</div>
 
 					<div className="col-md-6">

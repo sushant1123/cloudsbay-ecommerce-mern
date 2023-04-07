@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Card, Tabs, Tooltip } from "antd";
 import _ from "lodash";
 import { Link, useHistory } from "react-router-dom";
@@ -14,6 +14,7 @@ import DefaultImage from "../../images/default.png";
 import ShowAverageRating from "../ShowAverageRating";
 
 import { provideAReview } from "../../api's/product";
+import { addToUsersWishlist } from "../../api's/user";
 import { addToCart } from "../../redux/index.actions";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -69,6 +70,19 @@ const SingleProduct = ({ product }) => {
 
 		dispatch(addToCart(unique));
 		setTooltip("Added");
+	};
+
+	const handleAddToWishlist = async (e) => {
+		e.preventDefault();
+		try {
+			const response = await addToUsersWishlist(user.token, _id);
+			toast.success("Product added to wishlist");
+			setTimeout(() => {
+				history.push("/user/wishlist");
+			}, 2000);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	useEffect(() => {
@@ -131,9 +145,9 @@ const SingleProduct = ({ product }) => {
 						</Tooltip>,
 
 						//TODO add to wishlist
-						<Link to={`/`}>
+						<a onClick={(e) => handleAddToWishlist(e)}>
 							<HeartOutlined className="text-info" key="wishlist" /> <br /> Add to Wishiist
-						</Link>,
+						</a>,
 						<div onClick={handleReview}>
 							<StarOutlined
 								key="review"
