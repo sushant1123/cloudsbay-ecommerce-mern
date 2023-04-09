@@ -24,7 +24,7 @@ const ForgotPassword = ({ history }) => {
 		e.preventDefault();
 
 		const actionConfig = {
-			url: process.env.REACT_APP_FIREBASE_FORGOT_PASSWORD_REDIRECT_URL,
+			url: import.meta.env.REACT_APP_FIREBASE_FORGOT_PASSWORD_REDIRECT_URL,
 			handleCodeInApp: true,
 		};
 

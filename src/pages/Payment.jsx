@@ -5,7 +5,7 @@ import StripeCheckout from "../components/forms/StripeCheckout";
 import { createPaymentIntent } from "../api's/stripe";
 import { useSelector } from "react-redux";
 
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+const stripePromise = loadStripe(import.meta.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
 const Payment = () => {
 	const [clientSecret, setClientSecret] = useState("");

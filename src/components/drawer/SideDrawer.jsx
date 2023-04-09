@@ -17,7 +17,7 @@ const SideDrawer = ({ children }) => {
 
 	return (
 		<Drawer
-			visible={drawer}
+			open={drawer}
 			onClose={() => dispatch(setVisible(false))}
 			className="text-center"
 			title={`Cart | ${cart.length} Product(s)`}

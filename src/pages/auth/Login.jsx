@@ -25,8 +25,10 @@ const roleBasedRedirect = (res, history) => {
 };
 
 const Login = ({ history }) => {
-	const [email, setEmail] = useState("sushantbahirat40@gmail.com");
-	const [password, setPassword] = useState("12345678");
+	// const [email, setEmail] = useState("sushantbahirat40@gmail.com");
+	// const [password, setPassword] = useState("12345678");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 	const [loading, setLoading] = useState(false);
 
 	const { user } = useSelector((state) => state);
