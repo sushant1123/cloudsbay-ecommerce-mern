@@ -20,7 +20,7 @@ const Register = ({ history }) => {
 		e.preventDefault();
 
 		const actionConfig = {
-			url: process.env.REACT_APP_FIREBASE_REGISTER_REDIRECT_URL,
+			url: import.meta.env.REACT_APP_FIREBASE_REGISTER_REDIRECT_URL,
 			handleCodeInApp: true,
 		};
 
